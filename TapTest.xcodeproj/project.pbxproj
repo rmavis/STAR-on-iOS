@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		814F1B901BC0850F00324762 /* NewEntryFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814F1B8F1BC0850F00324762 /* NewEntryFormViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		818AFE6E1BB9B7D400C3376D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818AFE6D1BB9B7D400C3376D /* AppDelegate.swift */; };
 		818AFE701BB9B7D400C3376D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818AFE6F1BB9B7D400C3376D /* ViewController.swift */; };
 		818AFE731BB9B7D400C3376D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 818AFE711BB9B7D400C3376D /* Main.storyboard */; };
@@ -14,6 +15,14 @@
 		818AFE781BB9B7D400C3376D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 818AFE761BB9B7D400C3376D /* LaunchScreen.storyboard */; };
 		818AFE831BB9B7D400C3376D /* TapTestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818AFE821BB9B7D400C3376D /* TapTestTests.swift */; };
 		818AFE8E1BB9B7D400C3376D /* TapTestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818AFE8D1BB9B7D400C3376D /* TapTestUITests.swift */; };
+		818AFE9C1BB9C11000C3376D /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818AFE9B1BB9C11000C3376D /* StoreManager.swift */; settings = {ASSET_TAGS = (); }; };
+		818AFEA01BB9EDA900C3376D /* store in Resources */ = {isa = PBXBuildFile; fileRef = 818AFE9F1BB9EDA900C3376D /* store */; settings = {ASSET_TAGS = (); }; };
+		818AFEA21BBA08E300C3376D /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818AFEA11BBA08E300C3376D /* Entry.swift */; settings = {ASSET_TAGS = (); }; };
+		818AFEA41BBA097600C3376D /* EntryValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818AFEA31BBA097600C3376D /* EntryValue.swift */; settings = {ASSET_TAGS = (); }; };
+		818AFEA61BBA0A5100C3376D /* EntryTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818AFEA51BBA0A5000C3376D /* EntryTags.swift */; settings = {ASSET_TAGS = (); }; };
+		818AFEAE1BBB4DCC00C3376D /* TableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818AFEAD1BBB4DCC00C3376D /* TableCellView.swift */; settings = {ASSET_TAGS = (); }; };
+		818AFEB01BBC70F100C3376D /* EntryFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818AFEAF1BBC70F100C3376D /* EntryFilter.swift */; settings = {ASSET_TAGS = (); }; };
+		818AFEB21BBC856F00C3376D /* TableCellNewEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818AFEB11BBC856F00C3376D /* TableCellNewEntry.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		814F1B8F1BC0850F00324762 /* NewEntryFormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewEntryFormViewController.swift; sourceTree = "<group>"; };
 		818AFE6A1BB9B7D400C3376D /* TapTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TapTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		818AFE6D1BB9B7D400C3376D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		818AFE6F1BB9B7D400C3376D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,6 +57,14 @@
 		818AFE891BB9B7D400C3376D /* TapTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TapTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		818AFE8D1BB9B7D400C3376D /* TapTestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapTestUITests.swift; sourceTree = "<group>"; };
 		818AFE8F1BB9B7D400C3376D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		818AFE9B1BB9C11000C3376D /* StoreManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
+		818AFE9F1BB9EDA900C3376D /* store */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = store; sourceTree = "<group>"; };
+		818AFEA11BBA08E300C3376D /* Entry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
+		818AFEA31BBA097600C3376D /* EntryValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntryValue.swift; sourceTree = "<group>"; };
+		818AFEA51BBA0A5000C3376D /* EntryTags.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntryTags.swift; sourceTree = "<group>"; };
+		818AFEAD1BBB4DCC00C3376D /* TableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableCellView.swift; sourceTree = "<group>"; };
+		818AFEAF1BBC70F100C3376D /* EntryFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntryFilter.swift; sourceTree = "<group>"; };
+		818AFEB11BBC856F00C3376D /* TableCellNewEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableCellNewEntry.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,8 +115,17 @@
 		818AFE6C1BB9B7D400C3376D /* TapTest */ = {
 			isa = PBXGroup;
 			children = (
+				818AFE9F1BB9EDA900C3376D /* store */,
 				818AFE6D1BB9B7D400C3376D /* AppDelegate.swift */,
 				818AFE6F1BB9B7D400C3376D /* ViewController.swift */,
+				814F1B8F1BC0850F00324762 /* NewEntryFormViewController.swift */,
+				818AFEAF1BBC70F100C3376D /* EntryFilter.swift */,
+				818AFEAD1BBB4DCC00C3376D /* TableCellView.swift */,
+				818AFEB11BBC856F00C3376D /* TableCellNewEntry.swift */,
+				818AFEA11BBA08E300C3376D /* Entry.swift */,
+				818AFEA51BBA0A5000C3376D /* EntryTags.swift */,
+				818AFEA31BBA097600C3376D /* EntryValue.swift */,
+				818AFE9B1BB9C11000C3376D /* StoreManager.swift */,
 				818AFE711BB9B7D400C3376D /* Main.storyboard */,
 				818AFE741BB9B7D400C3376D /* Assets.xcassets */,
 				818AFE761BB9B7D400C3376D /* LaunchScreen.storyboard */,
@@ -230,6 +257,7 @@
 			files = (
 				818AFE781BB9B7D400C3376D /* LaunchScreen.storyboard in Resources */,
 				818AFE751BB9B7D400C3376D /* Assets.xcassets in Resources */,
+				818AFEA01BB9EDA900C3376D /* store in Resources */,
 				818AFE731BB9B7D400C3376D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -255,8 +283,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				818AFEA21BBA08E300C3376D /* Entry.swift in Sources */,
+				818AFE9C1BB9C11000C3376D /* StoreManager.swift in Sources */,
+				818AFEB21BBC856F00C3376D /* TableCellNewEntry.swift in Sources */,
+				818AFEA41BBA097600C3376D /* EntryValue.swift in Sources */,
+				814F1B901BC0850F00324762 /* NewEntryFormViewController.swift in Sources */,
 				818AFE701BB9B7D400C3376D /* ViewController.swift in Sources */,
+				818AFEB01BBC70F100C3376D /* EntryFilter.swift in Sources */,
 				818AFE6E1BB9B7D400C3376D /* AppDelegate.swift in Sources */,
+				818AFEAE1BBB4DCC00C3376D /* TableCellView.swift in Sources */,
+				818AFEA61BBA0A5100C3376D /* EntryTags.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -483,6 +519,7 @@
 				818AFE941BB9B7D400C3376D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		818AFE951BB9B7D400C3376D /* Build configuration list for PBXNativeTarget "TapTestTests" */ = {
 			isa = XCConfigurationList;
@@ -491,6 +528,7 @@
 				818AFE971BB9B7D400C3376D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		818AFE981BB9B7D400C3376D /* Build configuration list for PBXNativeTarget "TapTestUITests" */ = {
 			isa = XCConfigurationList;
@@ -499,6 +537,7 @@
 				818AFE9A1BB9B7D400C3376D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
