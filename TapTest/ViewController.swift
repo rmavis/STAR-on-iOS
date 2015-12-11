@@ -27,6 +27,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     // The main entries table.
     @IBOutlet weak var entriesTable: UITableView!
+    @IBOutlet weak var entriesTableBottomConstraint: NSLayoutConstraint!
     let tableEntryCellID = "EntryCell"
     let tableNewEntryCellID = "NewEntryCell"
 
@@ -38,7 +39,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var numberRowsToInsert: Int = 0
 
     static let animationDelay = 0.0
-        static let animationDuration = 0.2
+    static let animationDuration = 0.2
+
+    var currentKeyboardHeight:CGFloat = 0.0
 
 
 
@@ -46,7 +49,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         print("Need to toggle search bar!")
 
         if (entriesSearchBarBox.hidden == true) {
-            print("Appearing search bar")
+            // print("Appearing search bar")
 
             entriesSearchBarBox.hidden = false
             viewFrame.bringSubviewToFront(entriesSearchBarBox)
@@ -61,7 +64,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             )
         }
         else {
-            print("Disappearing search bar")
+            // print("Disappearing search bar")
 
             entriesSearchBar.resignFirstResponder()
 
@@ -78,7 +81,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             )
         }
 
-        print("Done toggling search bar.")
+        // print("Done toggling search bar.")
     }
 
 
@@ -88,22 +91,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //
 
     func numberOfSectionsInTableView(entriesTable: UITableView) -> Int {
-        print("Returning number of sections in table view.")
+        // print("Returning number of sections in table view.")
         return 1
     }
 
 
     func tableView(entriesTable: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("Returning number of rows: \(entries.count + numberRowsToInsert)")
+        // print("Returning number of rows: \(entries.count + numberRowsToInsert)")
         return (entries.count + numberRowsToInsert)
     }
 
 
     func tableView(entriesTable: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        print("Building new cell for table at \(indexPath.section):\(indexPath.row) / \(numberRowsToInsert).")
+        // print("Building new cell for table at \(indexPath.section):\(indexPath.row) / \(numberRowsToInsert).")
 
         if (numberRowsToInsert > 0) && (indexPath.row == 0) {
-            print("Using new entry cell!")
+            // print("Using new entry cell!")
             let cell = entriesTable.dequeueReusableCellWithIdentifier(tableNewEntryCellID, forIndexPath: indexPath) as! TableCellNewEntry
 
             return cell
@@ -116,9 +119,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let entry = entries[row]
 
             // These lines size the row according to the row's content.
+            // The real work of sizing the row is done by the constraints
+            // on the interface elements, but these two lines are needed.
             // They are important.
-            // entriesTable.rowHeight = UITableViewAutomaticDimension;
-            // entriesTable.estimatedRowHeight = 53.0;
+            // via http://www.raywenderlich.com/87975/dynamic-table-view-cell-height-ios-8-swift
+            entriesTable.rowHeight = UITableViewAutomaticDimension;
+            entriesTable.estimatedRowHeight = 10.0;
 
             if entry.value == nil {
                 cell.entryValueDisplay.text = "Empty : ("
@@ -127,31 +133,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             else {
                 // print("New label: \(entries[row].value!.string)")
 
-                cell.entryValueDisplay.lineBreakMode = .ByWordWrapping
-                cell.entryTagsDisplay.lineBreakMode = .ByWordWrapping
-
                 cell.entryValueDisplay.text = entry.value!.string
                 cell.entryTagsDisplay.text = entry.tags!.string()
-
-                // This is helpful.
-                print("Value cell height before sizing: \(cell.entryValueDisplay.frame.size.height)")
-                cell.entryValueDisplay.numberOfLines = 0
-                cell.entryValueDisplay.sizeToFit()
-                print("Value cell height after sizing: \(cell.entryValueDisplay.frame.size.height)")
-
-                cell.entryTagsDisplay.numberOfLines = 0
-                cell.entryTagsDisplay.sizeToFit()
-
-                // print("Value font size: \(cell.entryValueDisplay.font.pointSize)")
-                // print("TAGS font size: \(cell.entryTagsDisplay.font.pointSize)")
-                // print("Value cell height after sizing: \(cell.entryValueDisplay.frame.size.height)")
-                
-                // cell.sizeToFit()
-
-                // entriesTable.rowHeight = 20 + cell.entryTagsDisplay.font.pointSize + cell.entryValueDisplay.font.pointSize;
             }
 
-            print("Returning cell for row \(row) with label: \(cell.entryValueDisplay.text!)")
+            // print("Returning cell for row \(row) with label: \(cell.entryValueDisplay.text!)")
             return cell
         }
     }
@@ -200,10 +186,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
 
 
-//    func textViewDidEndEditing(textView: UITextView) -> Bool {
-//        print("Text view did end editing?")
-//        return true
-//    }
+    //    func textViewDidEndEditing(textView: UITextView) -> Bool {
+    //        print("Text view did end editing?")
+    //        return true
+    //    }
 
 
 
@@ -324,88 +310,88 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
 
 
-//    func getScreenDimensions() -> (height: CGFloat, width: CGFloat) {
-//        let screenRect = UIScreen.mainScreen().bounds
-//        return (height: screenRect.size.height, width: screenRect.size.width)
-//    }
+    //    func getScreenDimensions() -> (height: CGFloat, width: CGFloat) {
+    //        let screenRect = UIScreen.mainScreen().bounds
+    //        return (height: screenRect.size.height, width: screenRect.size.width)
+    //    }
 
 
 
-//    func resizeActionButtonBar() {
-//        print("Resizing action buttons bar.")
-//
-//        entriesSearchButton.center.x -= 100
-//    }
+    //    func resizeActionButtonBar() {
+    //        print("Resizing action buttons bar.")
+    //
+    //        entriesSearchButton.center.x -= 100
+    //    }
 
 
 
-//    func resizeSearchBarElements() {
-//        print("Resizing search bar view elements.")
-//
-//        let screenDimensions = getScreenDimensions()
-//
-//        let searchBarBoxDimensions = entriesSearchBarBox.bounds
-//        let searchBarDimensions = entriesSearchBar.bounds
-//        let cancelButtonDimensions = entriesSearchCancelButton.bounds
-//
-//        entriesSearchBarBox.bounds = CGRect(
-//            x: searchBarBoxDimensions.origin.x,
-//            y: searchBarBoxDimensions.origin.y,
-//            width: screenDimensions.width,
-//            height: searchBarDimensions.height + 20
-//        )
-//
-//        print("Search bar width should be \(screenDimensions.width) - \(cancelButtonDimensions.width) - 20.")
-//        entriesSearchBar.bounds = CGRect(
-//            x: searchBarBoxDimensions.origin.x + 10,
-//            y: searchBarBoxDimensions.origin.y + 10,
-//            width: (screenDimensions.width - cancelButtonDimensions.width - 20),
-//            height: searchBarDimensions.height
-//        )
-//
-//        entriesSearchCancelButton.bounds = CGRect(
-//            x: cancelButtonDimensions.origin.x,
-//            y: cancelButtonDimensions.origin.y,
-//            width: cancelButtonDimensions.width,
-//            height: cancelButtonDimensions.height
-//        )
-//    }
+    //    func resizeSearchBarElements() {
+    //        print("Resizing search bar view elements.")
+    //
+    //        let screenDimensions = getScreenDimensions()
+    //
+    //        let searchBarBoxDimensions = entriesSearchBarBox.bounds
+    //        let searchBarDimensions = entriesSearchBar.bounds
+    //        let cancelButtonDimensions = entriesSearchCancelButton.bounds
+    //
+    //        entriesSearchBarBox.bounds = CGRect(
+    //            x: searchBarBoxDimensions.origin.x,
+    //            y: searchBarBoxDimensions.origin.y,
+    //            width: screenDimensions.width,
+    //            height: searchBarDimensions.height + 20
+    //        )
+    //
+    //        print("Search bar width should be \(screenDimensions.width) - \(cancelButtonDimensions.width) - 20.")
+    //        entriesSearchBar.bounds = CGRect(
+    //            x: searchBarBoxDimensions.origin.x + 10,
+    //            y: searchBarBoxDimensions.origin.y + 10,
+    //            width: (screenDimensions.width - cancelButtonDimensions.width - 20),
+    //            height: searchBarDimensions.height
+    //        )
+    //
+    //        entriesSearchCancelButton.bounds = CGRect(
+    //            x: cancelButtonDimensions.origin.x,
+    //            y: cancelButtonDimensions.origin.y,
+    //            width: cancelButtonDimensions.width,
+    //            height: cancelButtonDimensions.height
+    //        )
+    //    }
 
 
 
-//    func resizeNewEntryFormElements() {
-//        print("Resizing new entry form view elements.")
-//
-//        let screenDimensions = getScreenDimensions()
-//
-//        // let entryFormDimensions = newEntryForm.bounds
-//
-//        print("Setting new entry form dimensions: \(screenDimensions.width), \(screenDimensions.height)")
-//        newEntryForm.bounds = CGRect(
-//            x: 0,
-//            y: 0,
-//            width: screenDimensions.width,
-//            height: screenDimensions.height
-//        )
-//
-//        print("Setting form element dimenstions: \(screenDimensions.width - 20), \(screenDimensions.height / 5)")
-//        newEntryFormValueField.bounds = CGRect(
-//            x: 10,
-//            y: 10,
-//            width: ceil(screenDimensions.width - 20),
-//            height: ceil(screenDimensions.height / 5)
-//        )
-//
-//        newEntryFormTagsField.bounds = CGRect(
-//            x: newEntryFormValueField.bounds.origin.x,
-//            y: newEntryFormValueField.bounds.origin.y + newEntryFormValueField.bounds.height + 20,
-//            width: ceil(screenDimensions.width - 20),
-//            height: ceil(screenDimensions.height / 5)
-//        )
-//
-//        newEntryFormTagsField.text = "WTF TAGS"
-//
-//    }
+    //    func resizeNewEntryFormElements() {
+    //        print("Resizing new entry form view elements.")
+    //
+    //        let screenDimensions = getScreenDimensions()
+    //
+    //        // let entryFormDimensions = newEntryForm.bounds
+    //
+    //        print("Setting new entry form dimensions: \(screenDimensions.width), \(screenDimensions.height)")
+    //        newEntryForm.bounds = CGRect(
+    //            x: 0,
+    //            y: 0,
+    //            width: screenDimensions.width,
+    //            height: screenDimensions.height
+    //        )
+    //
+    //        print("Setting form element dimenstions: \(screenDimensions.width - 20), \(screenDimensions.height / 5)")
+    //        newEntryFormValueField.bounds = CGRect(
+    //            x: 10,
+    //            y: 10,
+    //            width: ceil(screenDimensions.width - 20),
+    //            height: ceil(screenDimensions.height / 5)
+    //        )
+    //
+    //        newEntryFormTagsField.bounds = CGRect(
+    //            x: newEntryFormValueField.bounds.origin.x,
+    //            y: newEntryFormValueField.bounds.origin.y + newEntryFormValueField.bounds.height + 20,
+    //            width: ceil(screenDimensions.width - 20),
+    //            height: ceil(screenDimensions.height / 5)
+    //        )
+    //
+    //        newEntryFormTagsField.text = "WTF TAGS"
+    //
+    //    }
 
 
 
@@ -418,6 +404,44 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //    override func viewWillAppear(animated: Bool) {
     //        super.viewWillAppear(animated)
     //    }
+
+    func keyboardWillShow(notification: NSNotification) {
+        print("Keyboard will show!")
+
+        if let userInfo = notification.userInfo {
+            let keyboardSize = userInfo[UIKeyboardFrameEndUserInfoKey]!.CGRectValue.size
+            var tableRect = entriesTable.frame
+
+            tableRect.size.height -= keyboardSize.height
+
+            currentKeyboardHeight = tableRect.size.height
+
+            entriesTableBottomConstraint.constant = currentKeyboardHeight
+
+            UIView.animateWithDuration(0.25, animations: { () -> Void in
+                self.entriesTable.layoutIfNeeded()
+            })
+        }
+    }
+
+    func keyboardWillHide(notification: NSNotification) {
+        print("Keyboard will hide!")
+
+        if let userInfo = notification.userInfo {
+            //            let keyboardSize = userInfo[UIKeyboardFrameEndUserInfoKey]!.CGRectValue.size
+            //            var tableRect = entriesTable.frame
+            //
+            //            tableRect.size.height += keyboardSize.height
+            //
+            //            currentKeyboardHeight = tableRect.size.height
+
+            entriesTableBottomConstraint.constant = 0
+
+            UIView.animateWithDuration(0.25, animations: { () -> Void in
+                self.entriesTable.layoutIfNeeded()
+            })
+        }
+    }
 
 
     // Do any additional setup after loading the view, typically from a nib.
@@ -433,6 +457,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         entriesSearchBar.delegate = self
 
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+
         // Is this necessary?
         // Reload the table
         // entriesTable.reloadData()
@@ -442,6 +469,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
 }

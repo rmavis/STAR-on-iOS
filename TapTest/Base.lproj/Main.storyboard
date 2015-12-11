@@ -99,7 +99,6 @@
                                     </button>
                                 </subviews>
                                 <animations/>
-                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="40h-HR-f5V" firstAttribute="leading" secondItem="Sje-CE-vTr" secondAttribute="trailing" constant="10" id="0LB-Bl-6w2"/>
                                     <constraint firstAttribute="trailing" secondItem="40h-HR-f5V" secondAttribute="trailing" constant="20" id="8XM-Az-kNB"/>
@@ -108,20 +107,20 @@
                                     <constraint firstItem="40h-HR-f5V" firstAttribute="centerY" secondItem="e42-MB-QE3" secondAttribute="centerY" id="eo2-Lc-omh"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="185" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="iGe-TA-1Bx">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="216" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="iGe-TA-1Bx">
                                 <rect key="frame" x="0.0" y="148" width="600" height="452"/>
                                 <animations/>
-                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexBackgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="EntryCell" rowHeight="185" id="Vz7-4R-6O5" customClass="TableCellView" customModule="TapTest" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="600" height="185"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="EntryCell" rowHeight="216" id="Vz7-4R-6O5" customClass="TableCellView" customModule="TapTest" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="600" height="216"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" verticalHuggingPriority="1000" tableViewCell="Vz7-4R-6O5" id="YX5-sJ-9Yh">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="184"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="215"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Value" lineBreakMode="characterWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fbn-Nb-E06">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="Value" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fbn-Nb-E06">
                                                     <rect key="frame" x="10" y="0.0" width="580" height="100"/>
                                                     <animations/>
                                                     <constraints>
@@ -130,8 +129,13 @@
                                                     <fontDescription key="fontDescription" name="HoeflerText-Regular" family="Hoefler Text" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="ddt-Pw-PoP"/>
+                                                        </mask>
+                                                    </variation>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Tags" lineBreakMode="wordWrap" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fda-B9-hMx">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Tags" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fda-B9-hMx">
                                                     <rect key="frame" x="8" y="108" width="584" height="37"/>
                                                     <animations/>
                                                     <constraints>
@@ -140,17 +144,49 @@
                                                     <fontDescription key="fontDescription" name="HoeflerText-Regular" family="Hoefler Text" pointSize="15"/>
                                                     <color key="textColor" red="0.53637941919191912" green="0.53637941919191912" blue="0.53637941919191912" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="JzX-SJ-HN7"/>
+                                                        </mask>
+                                                    </variation>
                                                 </label>
                                             </subviews>
                                             <animations/>
                                             <constraints>
                                                 <constraint firstItem="Fbn-Nb-E06" firstAttribute="top" secondItem="YX5-sJ-9Yh" secondAttribute="topMargin" constant="10" id="1ie-G0-iFG"/>
+                                                <constraint firstItem="Fbn-Nb-E06" firstAttribute="leading" secondItem="YX5-sJ-9Yh" secondAttribute="leading" constant="15" id="54y-y0-HiI"/>
                                                 <constraint firstItem="Fda-B9-hMx" firstAttribute="leading" secondItem="YX5-sJ-9Yh" secondAttribute="leadingMargin" id="CGf-RN-tXi"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Fda-B9-hMx" secondAttribute="trailing" id="ChY-hx-X2M"/>
+                                                <constraint firstAttribute="trailing" secondItem="Fbn-Nb-E06" secondAttribute="trailing" constant="15" id="Kl0-Jd-1UL"/>
+                                                <constraint firstItem="Fbn-Nb-E06" firstAttribute="top" secondItem="YX5-sJ-9Yh" secondAttribute="top" constant="10" id="OML-J1-0e0"/>
+                                                <constraint firstAttribute="bottom" secondItem="Fda-B9-hMx" secondAttribute="bottom" constant="30" id="RBI-yz-BJe"/>
+                                                <constraint firstItem="Fda-B9-hMx" firstAttribute="top" secondItem="Fbn-Nb-E06" secondAttribute="bottom" id="TFb-tt-2Ky"/>
+                                                <constraint firstItem="Fda-B9-hMx" firstAttribute="top" secondItem="Fbn-Nb-E06" secondAttribute="bottom" constant="5" id="YF4-Tl-lGa"/>
+                                                <constraint firstAttribute="trailing" secondItem="Fda-B9-hMx" secondAttribute="trailing" constant="15" id="bU3-sn-0Qj"/>
                                                 <constraint firstItem="Fbn-Nb-E06" firstAttribute="leading" secondItem="YX5-sJ-9Yh" secondAttribute="leadingMargin" id="br5-hz-QYG"/>
+                                                <constraint firstItem="Fda-B9-hMx" firstAttribute="leading" secondItem="YX5-sJ-9Yh" secondAttribute="leading" constant="15" id="dds-aw-QJL"/>
+                                                <constraint firstItem="Fbn-Nb-E06" firstAttribute="top" secondItem="YX5-sJ-9Yh" secondAttribute="top" constant="30" id="fDo-ym-5hn"/>
+                                                <constraint firstItem="Fbn-Nb-E06" firstAttribute="leading" secondItem="YX5-sJ-9Yh" secondAttribute="leading" id="fHt-Ud-CAs"/>
+                                                <constraint firstAttribute="trailing" secondItem="Fbn-Nb-E06" secondAttribute="trailing" id="fvL-bB-4Zg"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="Fda-B9-hMx" secondAttribute="bottom" constant="10" id="hdF-x1-aEc"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Fbn-Nb-E06" secondAttribute="trailing" id="jB0-cl-6zT"/>
+                                                <constraint firstItem="Fda-B9-hMx" firstAttribute="top" secondItem="Fbn-Nb-E06" secondAttribute="bottom" constant="10" id="mBx-rJ-mVf"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="1ie-G0-iFG"/>
+                                                    <exclude reference="OML-J1-0e0"/>
+                                                    <exclude reference="br5-hz-QYG"/>
+                                                    <exclude reference="fHt-Ud-CAs"/>
+                                                    <exclude reference="fvL-bB-4Zg"/>
+                                                    <exclude reference="jB0-cl-6zT"/>
+                                                    <exclude reference="CGf-RN-tXi"/>
+                                                    <exclude reference="ChY-hx-X2M"/>
+                                                    <exclude reference="TFb-tt-2Ky"/>
+                                                    <exclude reference="YF4-Tl-lGa"/>
+                                                    <exclude reference="hdF-x1-aEc"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                         <animations/>
                                         <connections>
@@ -165,16 +201,28 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="iGe-TA-1Bx" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="2YZ-bc-hv2"/>
+                            <constraint firstAttribute="trailing" secondItem="iGe-TA-1Bx" secondAttribute="trailing" id="4Ek-Wi-kmK"/>
                             <constraint firstItem="iGe-TA-1Bx" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottomMargin" id="7B4-Ct-l2B"/>
                             <constraint firstItem="iGe-TA-1Bx" firstAttribute="top" secondItem="e42-MB-QE3" secondAttribute="bottom" constant="40" id="7EZ-OJ-HeG"/>
+                            <constraint firstItem="iGe-TA-1Bx" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="D3Q-Qg-kgf"/>
+                            <constraint firstAttribute="bottom" secondItem="iGe-TA-1Bx" secondAttribute="bottom" id="SyE-17-tXT"/>
                             <constraint firstItem="GOh-Rw-XdS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="VVf-Hm-9V8"/>
                             <constraint firstAttribute="trailingMargin" secondItem="e42-MB-QE3" secondAttribute="trailing" constant="-20" id="WHG-VM-4vM"/>
                             <constraint firstItem="GOh-Rw-XdS" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="10" id="a3S-mD-a6F"/>
                             <constraint firstAttribute="trailing" secondItem="GOh-Rw-XdS" secondAttribute="trailing" id="duW-j8-EtJ"/>
                             <constraint firstItem="e42-MB-QE3" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="fl6-L5-ofa"/>
+                            <constraint firstItem="iGe-TA-1Bx" firstAttribute="top" secondItem="e42-MB-QE3" secondAttribute="bottom" id="h3Q-mm-xfN"/>
                             <constraint firstItem="e42-MB-QE3" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="10" id="n20-Rc-9Sh"/>
                             <constraint firstAttribute="trailingMargin" secondItem="iGe-TA-1Bx" secondAttribute="trailing" id="oCc-d5-ubI"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="2YZ-bc-hv2"/>
+                                <exclude reference="7B4-Ct-l2B"/>
+                                <exclude reference="7EZ-OJ-HeG"/>
+                                <exclude reference="oCc-d5-ubI"/>
+                            </mask>
+                        </variation>
                     </view>
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
@@ -187,6 +235,7 @@
                         <outlet property="entriesSearchButton" destination="Sje-CE-vTr" id="nq1-oK-4JY"/>
                         <outlet property="entriesSearchCancelButton" destination="BCp-q9-dwN" id="Z1P-Wl-ucP"/>
                         <outlet property="entriesTable" destination="iGe-TA-1Bx" id="BJe-dV-Ico"/>
+                        <outlet property="entriesTableBottomConstraint" destination="SyE-17-tXT" id="ceV-mb-nMN"/>
                         <outlet property="entryAddButton" destination="40h-HR-f5V" id="2ky-bt-YVw"/>
                         <outlet property="viewFrame" destination="8bC-Xf-vdC" id="sHr-i5-BIC"/>
                     </connections>
