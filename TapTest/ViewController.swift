@@ -17,6 +17,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var entriesActionButtonsBox: UIView!
     @IBOutlet weak var entriesSearchButton: UIButton!
     @IBOutlet weak var entryAddButton: UIButton!
+    
+    // The border between the buttons and the table.
+    @IBOutlet weak var entryElementsBorder: UIView!
 
     // The search bar and its elements.
     @IBOutlet weak var entriesSearchBarBox: UIView!
@@ -47,13 +50,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     @IBAction func toggleSearchBar() {
         print("Need to toggle search bar!")
-
+        
         if (entriesSearchBarBox.hidden == true) {
             // print("Appearing search bar")
-
+            
             entriesSearchBarBox.hidden = false
             viewFrame.bringSubviewToFront(entriesSearchBarBox)
-
+            
             UIView.animateWithDuration(ViewController.animationDuration, delay: ViewController.animationDelay, options: [],
                 animations: {
                     self.entriesSearchBarBox.alpha = 1
@@ -63,13 +66,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
             )
         }
+            
         else {
             // print("Disappearing search bar")
-
+            
             entriesSearchBar.resignFirstResponder()
-
+            
             entriesSearchBarClearText()
-
+            
             UIView.animateWithDuration(ViewController.animationDuration, delay: ViewController.animationDelay, options: [],
                 animations: {
                     self.entriesSearchBarBox.alpha = 0
@@ -80,7 +84,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
             )
         }
-
+        
         // print("Done toggling search bar.")
     }
 
@@ -145,7 +149,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
 
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-
         let row = indexPath.row
         let entry = entries[row]
 
@@ -157,17 +160,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
 
     }
-
-
-
-    //    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-    ////         entriesTable.rowHeight = UITableViewAutomaticDimension;
-    ////         entriesTable.estimatedRowHeight = 23.0;
-    //
-    //        print("Estimating table row height.")
-    //        return UITableViewAutomaticDimension;
-    //    }
-
 
 
 
@@ -183,8 +175,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         print("Do something with this: \(entries[row].value!.string)")
     }
-
-
 
     //    func textViewDidEndEditing(textView: UITextView) -> Bool {
     //        print("Text view did end editing?")
@@ -310,91 +300,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
 
 
-    //    func getScreenDimensions() -> (height: CGFloat, width: CGFloat) {
-    //        let screenRect = UIScreen.mainScreen().bounds
-    //        return (height: screenRect.size.height, width: screenRect.size.width)
-    //    }
-
-
-
-    //    func resizeActionButtonBar() {
-    //        print("Resizing action buttons bar.")
-    //
-    //        entriesSearchButton.center.x -= 100
-    //    }
-
-
-
-    //    func resizeSearchBarElements() {
-    //        print("Resizing search bar view elements.")
-    //
-    //        let screenDimensions = getScreenDimensions()
-    //
-    //        let searchBarBoxDimensions = entriesSearchBarBox.bounds
-    //        let searchBarDimensions = entriesSearchBar.bounds
-    //        let cancelButtonDimensions = entriesSearchCancelButton.bounds
-    //
-    //        entriesSearchBarBox.bounds = CGRect(
-    //            x: searchBarBoxDimensions.origin.x,
-    //            y: searchBarBoxDimensions.origin.y,
-    //            width: screenDimensions.width,
-    //            height: searchBarDimensions.height + 20
-    //        )
-    //
-    //        print("Search bar width should be \(screenDimensions.width) - \(cancelButtonDimensions.width) - 20.")
-    //        entriesSearchBar.bounds = CGRect(
-    //            x: searchBarBoxDimensions.origin.x + 10,
-    //            y: searchBarBoxDimensions.origin.y + 10,
-    //            width: (screenDimensions.width - cancelButtonDimensions.width - 20),
-    //            height: searchBarDimensions.height
-    //        )
-    //
-    //        entriesSearchCancelButton.bounds = CGRect(
-    //            x: cancelButtonDimensions.origin.x,
-    //            y: cancelButtonDimensions.origin.y,
-    //            width: cancelButtonDimensions.width,
-    //            height: cancelButtonDimensions.height
-    //        )
-    //    }
-
-
-
-    //    func resizeNewEntryFormElements() {
-    //        print("Resizing new entry form view elements.")
-    //
-    //        let screenDimensions = getScreenDimensions()
-    //
-    //        // let entryFormDimensions = newEntryForm.bounds
-    //
-    //        print("Setting new entry form dimensions: \(screenDimensions.width), \(screenDimensions.height)")
-    //        newEntryForm.bounds = CGRect(
-    //            x: 0,
-    //            y: 0,
-    //            width: screenDimensions.width,
-    //            height: screenDimensions.height
-    //        )
-    //
-    //        print("Setting form element dimenstions: \(screenDimensions.width - 20), \(screenDimensions.height / 5)")
-    //        newEntryFormValueField.bounds = CGRect(
-    //            x: 10,
-    //            y: 10,
-    //            width: ceil(screenDimensions.width - 20),
-    //            height: ceil(screenDimensions.height / 5)
-    //        )
-    //
-    //        newEntryFormTagsField.bounds = CGRect(
-    //            x: newEntryFormValueField.bounds.origin.x,
-    //            y: newEntryFormValueField.bounds.origin.y + newEntryFormValueField.bounds.height + 20,
-    //            width: ceil(screenDimensions.width - 20),
-    //            height: ceil(screenDimensions.height / 5)
-    //        )
-    //
-    //        newEntryFormTagsField.text = "WTF TAGS"
-    //
-    //    }
-
-
-
 
 
     //
@@ -405,6 +310,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //        super.viewWillAppear(animated)
     //    }
 
+    // This is not yet perfect. Table is very short on 6s Plus.  #HERE
     func keyboardWillShow(notification: NSNotification) {
         print("Keyboard will show!")
 
@@ -426,21 +332,30 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     func keyboardWillHide(notification: NSNotification) {
         print("Keyboard will hide!")
+        
+        UIView.animateWithDuration(ViewController.animationDuration, delay: ViewController.animationDelay, options: [],
+            animations: {
+                self.entriesTableBottomConstraint.constant = 0
+            },
+            completion: {(completed: Bool) -> Void in
+                // self.entriesSearchBar.becomeFirstResponder()
+            }
+        )
 
-        if let userInfo = notification.userInfo {
-            //            let keyboardSize = userInfo[UIKeyboardFrameEndUserInfoKey]!.CGRectValue.size
-            //            var tableRect = entriesTable.frame
-            //
-            //            tableRect.size.height += keyboardSize.height
-            //
-            //            currentKeyboardHeight = tableRect.size.height
-
-            entriesTableBottomConstraint.constant = 0
-
-            UIView.animateWithDuration(0.25, animations: { () -> Void in
-                self.entriesTable.layoutIfNeeded()
-            })
-        }
+        //        if let userInfo = notification.userInfo {
+        //            let keyboardSize = userInfo[UIKeyboardFrameEndUserInfoKey]!.CGRectValue.size
+        //            var tableRect = entriesTable.frame
+        //
+        //            tableRect.size.height += keyboardSize.height
+        //
+        //            currentKeyboardHeight = tableRect.size.height
+        
+        //            entriesTableBottomConstraint.constant = 0
+        
+        //            UIView.animateWithDuration(0.25, animations: { () -> Void in
+        //                self.entriesTable.layoutIfNeeded()
+        //            })
+        //        }
     }
 
 

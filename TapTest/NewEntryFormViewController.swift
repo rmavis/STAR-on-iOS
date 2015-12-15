@@ -17,23 +17,41 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var newEntryForm: UIView!
 
-    @IBOutlet weak var newEntryFormValueField: UITextView!
-    @IBOutlet weak var newEntryFormTagsField: UITextView!
+    @IBOutlet weak var formValueField: UITextView!
+    @IBOutlet weak var formTagsField: UITextView!
 
-    @IBOutlet weak var newEntryFormButtonsBox: UIView!
-    @IBOutlet weak var newEntryFormSaveButton: UIButton!
-    @IBOutlet weak var newEntryFormCancelButton: UIButton!
+    @IBOutlet weak var formButtonsBox: UIView!
+    @IBOutlet weak var formSaveButton: UIButton!
+    @IBOutlet weak var formCancelButton: UIButton!
+    
+    let valueFieldPlaceholder = "Enter new text here."
+    let tagsFieldPlaceholder = "Separate tags with linebreaks or commas."
 
-
-
+    
 
     @IBAction func saveNewEntryFromForm() {
         print("Need to save new entry!")
 
-        let newEntryValue = newEntryFormValueField.text
-        let newEntryTags = newEntryFormTagsField.text
+        let newEntryValue = formValueField.text
+        let newEntryTags = formTagsField.text
 
         print("New values: \(newEntryValue) & \(newEntryTags)")
+    }
+    
+    
+    
+    func getFormFieldPlaceholder(formField: UITextView) -> String? {
+        if (formField == formValueField) {
+            return valueFieldPlaceholder
+        }
+            
+        else if (formField == formTagsField) {
+            return tagsFieldPlaceholder
+        }
+            
+        else {
+            return nil
+        }
     }
 
 
@@ -47,12 +65,22 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
 
     func textViewShouldBeginEditing(textView: UITextView) -> Bool {
         print("Text view should begin editing?")
+        
+        if getFormFieldPlaceholder(textView) == textView.text {
+            textView.text = ""
+        }
+        
         return true
     }
 
 
     func textViewShouldEndEditing(textView: UITextView) -> Bool {
         print("Text view should end editing?")
+        
+        if textView.text == "" {
+            textView.text = getFormFieldPlaceholder(textView)
+        }
+
         return true
     }
 
@@ -61,17 +89,26 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
         print("Text view did change!")
     }
 
+    // If newlines can separate tags, then this makes no sense.
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        print("Replacing text! \(text)")
-
-        if (text == "\n") {
-            print("newline")
-            textView.resignFirstResponder()
-            return false
-        }
-        else {
-            return true
-        }
+        //        if (textView == formTagsField) {
+        //            print("Replacing text! \(text)")
+        //
+        //            if (text == "\n") {
+        //                print("newline")
+        //                textView.resignFirstResponder()
+        //                return false
+        //            }
+        //            else {
+        //                return true
+        //            }
+        //        }
+        //        
+        //        else {
+        //            return true
+        //        }
+        
+        return true
     }
 
 
@@ -83,8 +120,11 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
 
         print("Loading new entry form view controller!")
 
-        newEntryFormValueField.delegate = self
-        newEntryFormTagsField.delegate = self
+        formValueField.delegate = self
+        formTagsField.delegate = self
+        
+        formValueField.text = self.valueFieldPlaceholder
+        formTagsField.text = self.tagsFieldPlaceholder
     }
 
 
