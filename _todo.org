@@ -1,0 +1,11 @@
+* Build [0/9]
+** TODO Add entry
+** TODO Delete entry
+** TODO Edit entry
+** TODO Test on different screens
+** TODO Open / copy actions
+** TODO Tags view?
+** TODO Reverse order of entries?
+   So additions are on top.
+** TODO Dropbox
+** TODO Icon
