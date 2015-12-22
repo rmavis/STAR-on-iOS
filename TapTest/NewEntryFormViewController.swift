@@ -15,17 +15,42 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var viewFrame: UIView!
 
-    @IBOutlet weak var newEntryForm: UIView!
-
-    @IBOutlet weak var formValueField: UITextView!
-    @IBOutlet weak var formTagsField: UITextView!
+    @IBOutlet weak var newEntryFormViewBounder: UIView!
 
     @IBOutlet weak var formButtonsBox: UIView!
     @IBOutlet weak var formSaveButton: UIButton!
     @IBOutlet weak var formCancelButton: UIButton!
-    
+
+    @IBOutlet weak var entryFormBorder: UIView!
+
+    @IBOutlet weak var newEntryFormScrollContainer: UIScrollView!
+
+    @IBOutlet weak var newEntryForm: UIView!
+    @IBOutlet weak var formValueField: UITextView!
+    @IBOutlet weak var formTagsField: UITextView!
+
     let valueFieldPlaceholder = "Enter new text here."
     let tagsFieldPlaceholder = "Separate tags with linebreaks or commas."
+
+    @IBOutlet weak var viewBounderBottomConstraint: NSLayoutConstraint!
+    
+    var currentKeyboardHeight:CGFloat = 0.0
+
+
+
+    @IBAction func dismissKeyboard() {
+        print("Need to dismiss keyboard!")
+
+        if formValueField.isFirstResponder() {
+            formValueField.resignFirstResponder()
+        }
+        else if formTagsField.isFirstResponder() {
+            formTagsField.resignFirstResponder()
+        }
+        else {
+            print("WTF is the first responder?")
+        }
+    }
 
     
 
@@ -113,6 +138,44 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
 
 
 
+/*
+    Loading new entry form view controller!
+    Text view should begin editing?
+    [Main VC] Keyboard will show!
+    [New Entry Form VC] Keyboard will show!
+*/
+
+    func keyboardWillShow(notification: NSNotification) {
+        print("[New Entry VC] Keyboard will show!")
+
+        if let userInfo = notification.userInfo {
+            let keyboardSize = userInfo[UIKeyboardFrameEndUserInfoKey]!.CGRectValue.size
+            let contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0);
+
+            newEntryFormScrollContainer.contentInset = contentInsets
+            newEntryFormScrollContainer.scrollIndicatorInsets = contentInsets
+        }
+
+        //        // If active text field is hidden by keyboard, scroll it so it's visible
+        //        // Your app might not need or want this behavior.
+        //        CGRect aRect = self.view.frame;
+        //        aRect.size.height -= kbSize.height;
+        //        if (!CGRectContainsPoint(aRect, activeField.frame.origin) ) {
+        //            [self.scrollView scrollRectToVisible:activeField.frame animated:YES];
+        //        }
+    }
+
+    func keyboardWillHide(notification: NSNotification) {
+        print("Keyboard will hide!")
+
+        let contentInsets = UIEdgeInsetsZero
+        newEntryFormScrollContainer.contentInset = contentInsets
+        newEntryFormScrollContainer.scrollIndicatorInsets = contentInsets
+    }
+
+
+
+
 
 
     override func viewDidLoad() {
@@ -125,6 +188,10 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
         
         formValueField.text = self.valueFieldPlaceholder
         formTagsField.text = self.tagsFieldPlaceholder
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+
     }
 
 

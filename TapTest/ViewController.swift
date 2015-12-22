@@ -310,52 +310,33 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //        super.viewWillAppear(animated)
     //    }
 
-    // This is not yet perfect. Table is very short on 6s Plus.  #HERE
+    // This is not yet perfect.  #HERE
     func keyboardWillShow(notification: NSNotification) {
-        print("Keyboard will show!")
+        print("[Main VC] Keyboard will show!")
 
         if let userInfo = notification.userInfo {
             let keyboardSize = userInfo[UIKeyboardFrameEndUserInfoKey]!.CGRectValue.size
-            var tableRect = entriesTable.frame
+            let contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0);
 
-            tableRect.size.height -= keyboardSize.height
-
-            currentKeyboardHeight = tableRect.size.height
-
-            entriesTableBottomConstraint.constant = currentKeyboardHeight
-
-            UIView.animateWithDuration(0.25, animations: { () -> Void in
-                self.entriesTable.layoutIfNeeded()
-            })
+            entriesTable.contentInset = contentInsets
+            entriesTable.scrollIndicatorInsets = contentInsets
         }
+
+        //        // If active text field is hidden by keyboard, scroll it so it's visible
+        //        // Your app might not need or want this behavior.
+        //        CGRect aRect = self.view.frame;
+        //        aRect.size.height -= kbSize.height;
+        //        if (!CGRectContainsPoint(aRect, activeField.frame.origin) ) {
+        //            [self.scrollView scrollRectToVisible:activeField.frame animated:YES];
+        //        }
     }
 
     func keyboardWillHide(notification: NSNotification) {
         print("Keyboard will hide!")
-        
-        UIView.animateWithDuration(ViewController.animationDuration, delay: ViewController.animationDelay, options: [],
-            animations: {
-                self.entriesTableBottomConstraint.constant = 0
-            },
-            completion: {(completed: Bool) -> Void in
-                // self.entriesSearchBar.becomeFirstResponder()
-            }
-        )
 
-        //        if let userInfo = notification.userInfo {
-        //            let keyboardSize = userInfo[UIKeyboardFrameEndUserInfoKey]!.CGRectValue.size
-        //            var tableRect = entriesTable.frame
-        //
-        //            tableRect.size.height += keyboardSize.height
-        //
-        //            currentKeyboardHeight = tableRect.size.height
-        
-        //            entriesTableBottomConstraint.constant = 0
-        
-        //            UIView.animateWithDuration(0.25, animations: { () -> Void in
-        //                self.entriesTable.layoutIfNeeded()
-        //            })
-        //        }
+        let contentInsets = UIEdgeInsetsZero
+        entriesTable.contentInset = contentInsets
+        entriesTable.scrollIndicatorInsets = contentInsets
     }
 
 
