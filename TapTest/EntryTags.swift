@@ -9,11 +9,42 @@
 import Foundation
 
 class EntryTags {
+    
+    
+    // Give this a String and it will return an Array of Strings.
+    // The Strings will be trimmed. The Array will be sorted and will contain unique values only.
+    static func stringToArray(messyStr: String) -> [String] {
+        var cleanArr = [String]()
+        
+        let messyArr = messyStr.stringByReplacingOccurrencesOfString(",", withString: "\n")
 
+        for part in messyArr.componentsSeparatedByString("\n") {
+            let cleanStr = part.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+            if cleanStr.characters.count > 0 {
+                cleanArr.append(cleanStr)
+            }
+        }
+
+        return Array(Set(cleanArr)).sort {
+            return $0 < $1
+        }
+    }
+
+    
+
+    
+    
+    //
+    // Below this are methods and properties related to the instance.
+    //
+    
+    
     let pool: [String]
 
 
 
+    // A tags pool can be created from a String.
+    // This is mostly useful when reading from the store.
     init(group: String) {
         let pool = group.componentsSeparatedByString(StoreManager.unitSeparator)
 
@@ -24,11 +55,24 @@ class EntryTags {
             self.pool = [ ]
         }
     }
+    
+    
+    
+    // Or a tags pool can be created from an array of Strings.
+    // This is useful when saving a new entry from the form.
+    init(group: [String]) {
+        self.pool = group
+    }
 
 
 
-    func string() -> String {
-        return self.pool.joinWithSeparator(", ")
+    func join(separator: String?) -> String {
+        if let sep = separator {
+            return self.pool.joinWithSeparator(sep)
+        }
+        else {
+            return self.pool.joinWithSeparator(StoreManager.unitSeparator)
+        }
     }
 
 

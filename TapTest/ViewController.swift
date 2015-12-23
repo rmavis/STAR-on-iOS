@@ -138,7 +138,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 // print("New label: \(entries[row].value!.string)")
 
                 cell.entryValueDisplay.text = entry.value!.string
-                cell.entryTagsDisplay.text = entry.tags!.string()
+                cell.entryTagsDisplay.text = entry.tags!.join(", ")
             }
 
             // print("Returning cell for row \(row) with label: \(cell.entryValueDisplay.text!)")
@@ -338,6 +338,26 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         entriesTable.contentInset = contentInsets
         entriesTable.scrollIndicatorInsets = contentInsets
     }
+    
+    
+    
+    override func viewWillDisappear(animated: Bool) {
+        print("[Main VC] View will disappear")
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        
+        super.viewWillDisappear(animated)
+    }
+    
+    
+    override func viewWillAppear(animated: Bool) {
+        print("[Main VC] View will appear")
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        
+        super.viewWillAppear(animated)
+    }
 
 
     // Do any additional setup after loading the view, typically from a nib.
@@ -352,9 +372,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         entriesTable.separatorStyle = UITableViewCellSeparatorStyle.None;
 
         entriesSearchBar.delegate = self
-
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
 
         // Is this necessary?
         // Reload the table

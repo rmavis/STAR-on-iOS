@@ -10,32 +10,43 @@ import Foundation
 
 class StoreManager {
 
-    let fileName: String
     let bundle = NSBundle.mainBundle()
 
+    static let fileName: String = "store"
+    
     static let fileSeparator: String = "\u{001C}"
     static let groupSeparator: String = "\u{001D}"
     static let recordSeparator: String = "\u{001E}"
     static let unitSeparator: String = "\u{001F}"
-
-
-    init(fileName: String = "store") {
-        self.fileName = fileName
+    
+    
+    
+    static func saveEntryToFile(entry: Entry) -> Bool {
+        print("Need to save entry to file!")
+        
+        return true
     }
 
 
+    
+    init() {
+    }
+
+
+    
     func filePath() -> String? {
-        if let path = self.bundle.pathForResource(self.fileName, ofType: nil) {
+        if let path = self.bundle.pathForResource(StoreManager.fileName, ofType: nil) {
             // print(path)
             return path
         }
         else {
-            print("Missing \(self.fileName) file!")
+            print("Missing \(StoreManager.fileName) file!")
             return nil
         }
     }
 
 
+    
     func entriesArray() -> [Entry]? {
         do {
             let data = try NSData(contentsOfFile: self.filePath()!, options: NSDataReadingOptions.DataReadingUncached)
@@ -43,14 +54,19 @@ class StoreManager {
             // print("data read: \(stringData)")
 
             let groups = stringData!.componentsSeparatedByString(StoreManager.groupSeparator)
-            print("Read \(groups.count) groups from file.")
+            // print("Read \(groups.count) groups from file.")
 
             var entries: [Entry] = [ ]
             for group in groups {
-                entries.append(Entry(group: group))
+                if let entry_check = Entry.checkStringForm(group) {
+                    entries.append(entry_check)
+                }
+                else {
+                    print("Entry is not well-formed! Skipping.")
+                }
             }
 
-            return entries
+            return entries.reverse()
         }
 
         catch let error as NSError {
@@ -58,4 +74,6 @@ class StoreManager {
             return nil
         }
     }
+    
+    
 }
