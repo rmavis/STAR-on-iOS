@@ -130,16 +130,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             entriesTable.rowHeight = UITableViewAutomaticDimension;
             entriesTable.estimatedRowHeight = 10.0;
 
-            if entry.value == nil {
-                cell.entryValueDisplay.text = "Empty : ("
-                cell.entryTagsDisplay.text = "No tags."
-            }
-            else {
+            //            if entry.value == nil {
+            //                cell.entryValueDisplay.text = "Empty : ("
+            //                cell.entryTagsDisplay.text = "No tags."
+            //            }
+            //            else {
                 // print("New label: \(entries[row].value!.string)")
 
-                cell.entryValueDisplay.text = entry.value!.string
-                cell.entryTagsDisplay.text = entry.tags!.join(", ")
-            }
+                cell.entryValueDisplay.text = entry.value.string
+                cell.entryTagsDisplay.text = entry.tags.join(", ")
+            // }
 
             // print("Returning cell for row \(row) with label: \(cell.entryValueDisplay.text!)")
             return cell
@@ -153,7 +153,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let entry = entries[row]
 
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            print("Want to delete entry with value \(entry.value!.string)")
+            print("Want to delete entry with value \(entry.value.string)")
         }
         else {
             print("Want to insert")
@@ -173,7 +173,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         let row = indexPath.row
 
-        print("Do something with this: \(entries[row].value!.string)")
+        print("Do something with this: \(entries[row].value.string)")
     }
 
     //    func textViewDidEndEditing(textView: UITextView) -> Bool {

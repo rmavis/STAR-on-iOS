@@ -50,9 +50,9 @@ class Entry {
     //
     
     
-    let value: EntryValue?
-    let tags: EntryTags?
-    // let metadata: EntryMetadata
+    let value: EntryValue
+    let tags: EntryTags
+    let metadata: EntryMetadata
 
     
     
@@ -61,7 +61,7 @@ class Entry {
     init(value: String, tags: String, metadata: String) {
         self.value = EntryValue(part: value)
         self.tags = EntryTags(group: tags)
-        // self.metadata = EntryMetadata(metadata)
+        self.metadata = EntryMetadata(group: metadata)
     }
     
     
@@ -71,6 +71,11 @@ class Entry {
     init(value: String, tags: [String]) {
         self.value = EntryValue(part: value)
         self.tags = EntryTags(group: tags)
+
+        self.metadata = EntryMetadata()
+        self.metadata.setDateCreated()
+        // That sets the Date Created value to the current timestamp.
+        // The other metadata values can remain 0.
     }
 
 
@@ -78,16 +83,12 @@ class Entry {
     func match(searchString: String) -> Bool {
         var matched = false
 
-        if (self.value != nil) {
-            if self.value!.match(searchString) {
-                matched = true
-            }
+        if self.value.match(searchString) {
+            matched = true
         }
 
-        if (matched == false) && (self.tags != nil) {
-            if (self.tags!.match(searchString)) {
-                matched = true
-            }
+        if (matched == false) && (self.tags.match(searchString)) {
+            matched = true
         }
 
         return matched

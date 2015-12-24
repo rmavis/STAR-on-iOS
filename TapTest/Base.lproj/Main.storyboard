@@ -345,7 +345,7 @@
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="120" id="oZi-qg-aRB"/>
                                                         </constraints>
-                                                        <color key="textColor" white="0.81000000000000005" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="HoeflerText-Regular" family="Hoefler Text" pointSize="15"/>
                                                         <textInputTraits key="textInputTraits"/>
                                                     </textView>

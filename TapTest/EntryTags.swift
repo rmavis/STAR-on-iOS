@@ -13,7 +13,7 @@ class EntryTags {
     
     // Give this a String and it will return an Array of Strings.
     // The Strings will be trimmed. The Array will be sorted and will contain unique values only.
-    static func stringToArray(messyStr: String) -> [String] {
+    static func stringToCleanArray(messyStr: String) -> [String] {
         var cleanArr = [String]()
         
         let messyArr = messyStr.stringByReplacingOccurrencesOfString(",", withString: "\n")
@@ -57,7 +57,6 @@ class EntryTags {
     }
     
     
-    
     // Or a tags pool can be created from an array of Strings.
     // This is useful when saving a new entry from the form.
     init(group: [String]) {
@@ -80,7 +79,7 @@ class EntryTags {
     func match(searchString: String) -> Bool {
         var matches: Bool = false
 
-        for tag in pool {
+        for tag in self.pool {
             print("Checking \(tag.lowercaseString) against \(searchString)")
 
             if (tag.lowercaseString.rangeOfString(searchString, options: .RegularExpressionSearch) != nil) {

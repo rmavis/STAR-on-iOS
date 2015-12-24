@@ -20,9 +20,9 @@ class EntryValue {
 
 
     func match(searchString: String) -> Bool {
-        print("Checking \(string.lowercaseString) against \(searchString)")
+        // print("Checking \(string.lowercaseString) against \(searchString)")
 
-        if (string.lowercaseString.rangeOfString(searchString, options: .RegularExpressionSearch) != nil) {
+        if (self.string.lowercaseString.rangeOfString(searchString, options: .RegularExpressionSearch) != nil) {
             return true
         }
         else {
