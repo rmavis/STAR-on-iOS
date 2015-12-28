@@ -140,34 +140,27 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
 
     
     // This function is connected to the SAVE button.
-    // If the form field are invalid, then the button will be the inactive color,
-    // so it's okay if this function silently does nothing.
+    // If the value field is empty, then the button will be inactive.
+    // The button becomes active only when the field is valid.
     @IBAction func saveNewEntryFromForm() {
         print("Need to save new entry!")
         
-        // The value field is required.
-        if isValueFieldValid() == true {
-            // The tags are optional but, if present, must be an array.
-            var tags: [String] = []
-            if showingPlaceholder[formTagsField] == false {
-                tags = EntryTags.stringToCleanArray(formTagsField.text)
-            }
-            
-            let entry = Entry(value: formValueField.text, tags: tags)
-            
-            if StoreManager.saveEntryToFile(entry) == true {
-                print("Saved new entry to store!")
-                print("New entry value: \(entry.value.string)")
-                print("New entry tags: \(entry.tags.join(", "))")
-                print("New entry metadata: \(entry.metadata.join(", "))")
-            }
-            else {
-                print("Failed to save new entry to store : (")
-            }
+        // The tags are optional but, if present, must be an array.
+        var tags: [String] = []
+        if isTagsFieldFilled() == true {
+            tags = EntryTags.stringToCleanArray(formTagsField.text)
         }
-            
+
+        let entry = Entry(value: formValueField.text, tags: tags)
+
+        if StoreManager.appendEntryToFile(entry) == true {
+            print("Saved new entry to store!")
+            print("New entry value: \(entry.value.string)")
+            print("New entry tags: \(entry.tags.join(", "))")
+            print("New entry metadata: \(entry.metadata.join(", "))")
+        }
         else {
-            print("This form has an invalid Value.")
+            print("Failed to save new entry to store : (")
         }
     }
     

@@ -34,7 +34,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let tableEntryCellID = "EntryCell"
     let tableNewEntryCellID = "NewEntryCell"
 
-    let entriesStore = StoreManager()
+    // let entriesStore = StoreManager()
 
     var entries: [Entry] = [ ]
     var filteredEntriesCache: [EntryFilter] = [ ]
@@ -263,7 +263,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         var filteredEntries: [Entry] = [ ]
 
         if searchString == "" {
-            filteredEntries = entriesStore.entriesArray()!
+            filteredEntries = StoreManager.getEntries()!
             self.filteredEntriesCache = [ ]
         }
 
@@ -364,7 +364,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.entries = entriesStore.entriesArray()!
+        StoreManager.copyFileFromBundleToSandbox()
+        self.entries = StoreManager.getEntries()!
 
         entriesTable.delegate = self
         entriesTable.dataSource = self

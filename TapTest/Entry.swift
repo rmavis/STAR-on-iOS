@@ -24,12 +24,11 @@ class Entry {
     
     // This will check if the given String looks like an entry from the store.
     static func checkStringForm(group: String) -> Entry? {
-        let parts = group.componentsSeparatedByString(StoreManager.recordSeparator)
-        // print("Line has \(parts.count) parts.")
+        let groups = group.componentsSeparatedByString(StoreManager.groupSeparator)
+        // print("Line has \(groups.count) groups.")
         
-        if parts.count == 3 {
-            // print("Parts: \(parts[0]), \(parts[1]), \(parts[2])")
-            let entry = Entry(value: parts[0], tags: parts[1], metadata: parts[2])
+        if groups.count == 3 {
+            let entry = Entry(value: groups[0], tags: groups[1], metadata: groups[2])
             return entry
         }
             
@@ -92,6 +91,16 @@ class Entry {
         }
 
         return matched
+    }
+
+
+
+    func join() -> String {
+        return [
+            self.value.string,
+            self.tags.join(nil),
+            self.metadata.join(nil)
+        ].joinWithSeparator(StoreManager.groupSeparator)
     }
 
 }
