@@ -1,11 +1,23 @@
-* Build [0/9]
-** TODO Add entry
+* Build [2/10]
+** DONE Reverse order of entries?
+   So additions are on top.
+** DONE Add entry [3/3]
+   - [X] Create entry
+   - [X] Save entry to file
+   - [X] Add entry to view
 ** TODO Delete entry
 ** TODO Edit entry
-** TODO Test on different screens
 ** TODO Open / copy actions
 ** TODO Tags view?
-** TODO Reverse order of entries?
-   So additions are on top.
+** TODO Highlight matching search string
 ** TODO Dropbox
 ** TODO Icon
+** TODO Test on different screens
+** Extras [0/2]
+   - [ ] Animate new entry's addition to table?
+   - [ ] [[https://developer.apple.com/library/ios/documentation/IDEs/Conceptual/AppDistributionGuide/TestingYouriOSApp/TestingYouriOSApp.html][Install on phone]]
+
+
+* Refactor [0/2]
+** TODO Review ViewController class
+** TODO When reading entries from file, don't need to append then reverse array?

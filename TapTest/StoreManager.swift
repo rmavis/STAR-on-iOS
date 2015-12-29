@@ -8,8 +8,9 @@
 
 import Foundation
 
-class StoreManager {
+class StoreManager: NSObject, NSFileManagerDelegate {
 
+    // This is the name of the store file.
     static let fileName: String = "store"
 
     // This is the ASCII file separator character.
@@ -34,17 +35,6 @@ class StoreManager {
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         let documentsDirectory = paths[0]
         return "\(documentsDirectory)/\(StoreManager.fileName)"
-
-        // Filepath: /Users/rfm/Library/Developer/CoreSimulator/Devices/B43B9E48-A081-4C1A-B102-114E11B5C621/data/Containers/Data/Application/B9C3E13C-4597-4324-A180-301885062BDB/Documents/store
-
-        //        if let path = NSBundle.mainBundle().pathForResource(StoreManager.fileName, ofType: nil) {
-        //            // print(path)
-        //            return path
-        //        }
-        //        else {
-        //            print("Missing \(StoreManager.fileName) file!")
-        //            return nil
-        //        }
     }
 
 
@@ -53,13 +43,6 @@ class StoreManager {
         do {
             let dataString = try String(contentsOfFile: StoreManager.filePath(), encoding: NSUTF8StringEncoding)
             return dataString
-            // let data = try NSData(contentsOfFile: filePath, options: NSDataReadingOptions.DataReadingUncached)
-            //                if let string = String(data: data, encoding: NSUTF8StringEncoding) {
-            //                    return string
-            //                }
-            //                else {
-            //                    return nil
-            //                }
         }
 
         catch let error as NSError {
@@ -101,18 +84,20 @@ class StoreManager {
     static func appendEntryToFile(entry: Entry) -> Bool {
         print("Need to save entry to file!")
 
-        if let existingEntries = StoreManager.readDataFromFile() {
-            let newEntries = [existingEntries, entry.join()].joinWithSeparator(StoreManager.entrySeparator)
+        if let fileHandle = NSFileHandle.init(forUpdatingAtPath: StoreManager.filePath()) {
+            let entry = StoreManager.entrySeparator + entry.join()
 
-            do {
-                try newEntries.writeToFile(StoreManager.filePath(), atomically: false, encoding: NSUTF8StringEncoding)
-                return true
-            }
+            print("Adding \(entry)")
+            print("To \(StoreManager.filePath())")
 
-            catch let error as NSError {
-                print(error)
-                return false
-            }
+            fileHandle.seekToEndOfFile()
+            fileHandle.writeData(entry.dataUsingEncoding(NSUTF8StringEncoding)!)
+            fileHandle.closeFile()
+
+            // This is only for testing  #HERE
+            StoreManager.copyFileFromSandboxToBundle()
+
+            return true
         }
 
         else {
@@ -122,36 +107,84 @@ class StoreManager {
 
 
 
+    // This is pointless because it copies from the virtual, sandboxed bundle
+    // to the virtual, sandboxed app in the virtual machine. It never touches
+    // the store file relative to this file.
+
     static func copyFileFromBundleToSandbox() {
-        if let path = NSBundle.mainBundle().pathForResource(StoreManager.fileName, ofType: nil) {
-            do {
-                let bundleData = try String(contentsOfFile: path, encoding: NSUTF8StringEncoding)
+        do {
+            let storeManager = StoreManager()
 
-                do {
-                    try bundleData.writeToFile(StoreManager.filePath(), atomically: false, encoding: NSUTF8StringEncoding)
-                    print("Copied store file from bundle to sandbox")
-                }
+            try storeManager.fileManager.copyItemAtPath(
+                NSBundle.mainBundle().pathForResource(StoreManager.fileName, ofType: nil)!,
+                toPath: StoreManager.filePath()
+            )
 
-                catch let error as NSError {
-                    print("Error writing bundle data to sandbox file")
-                    print(error)
-                }
-
-            }
-
-            catch let error as NSError {
-                print("Error reading bundle data")
-                print(error)
-            }
+            print("Copied store file from bundle to sandbox.")
         }
-        else {
-            print("Missing \(StoreManager.fileName) file in app bundle!")
+
+        catch let error as NSError {
+            print("Error copying bundle file to the sandbox.")
+            print(error)
+        }
+    }
+
+
+    static func copyFileFromSandboxToBundle() {
+        do {
+            let storeManager = StoreManager()
+
+            try storeManager.fileManager.copyItemAtPath(
+                StoreManager.filePath(),
+                toPath: NSBundle.mainBundle().pathForResource(StoreManager.fileName, ofType: nil)!
+            )
+
+            print("Copied store file from sandbox to bundle.")
+        }
+
+        catch let error as NSError {
+            print("Error copying sandbox file to the bundle.")
+            print(error)
         }
     }
 
 
 
-    init() {
+
+
+    //
+    // These are properties and methods related to the instance.
+    //
+
+    // This is the file manager.  #HERE
+    var fileManager: NSFileManager
+
+
+
+    override init() {
+        self.fileManager = NSFileManager.init()
+
+        super.init()
+
+        self.fileManager.delegate = self
     }
+
+
+
+    // When copying a file, if the destination file already exists,
+    // then the NSFileManager pings this to check if it should proceed.
+    func fileManager(fileManager: NSFileManager, shouldProceedAfterError error: NSError, copyingItemAtPath srcPath: String, toPath dstPath: String) -> Bool {
+        // print("Should proceed with copying from \(srcPath) to \(dstPath)? You betcha.")
+        return true
+    }
+
+    func fileManager(fileManager: NSFileManager, shouldCopyItemAtURL srcURL: NSURL, toURL dstURL: NSURL) -> Bool {
+        // print("Should proceed with copying from \(srcURL) to \(dstURL)? You betcha.")
+        return true
+    }
+
+    /*
+    Should proceed with copying from /Users/rfm/Library/Developer/CoreSimulator/Devices/BB0D9A98-B3A8-43C5-97E6-3E8FF32FC32D/data/Containers/Bundle/Application/CC22DAD4-6CBF-479D-B480-F6F171B418C5/TapTest.app/store to /Users/rfm/Library/Developer/CoreSimulator/Devices/BB0D9A98-B3A8-43C5-97E6-3E8FF32FC32D/data/Containers/Data/Application/C6953432-28C9-44C0-BC6D-DF1B8EA8C2FD/Documents/store? You betcha.
+    */
 
 }

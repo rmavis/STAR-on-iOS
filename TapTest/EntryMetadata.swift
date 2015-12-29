@@ -98,9 +98,11 @@ class EntryMetadata {
             pool = parts.map {
                 (part) -> Int in
                 if (part.rangeOfString("^[0-9]+$", options: .RegularExpressionSearch) != nil) {
+                    // print("Matches metadata: \(part)")
                     return Int(part)!
                 }
                 else {
+                    // print("Metadata didn't match")
                     return 0
                 }
             }

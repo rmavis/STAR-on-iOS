@@ -44,7 +44,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     static let animationDelay = 0.0
     static let animationDuration = 0.2
 
-    var currentKeyboardHeight:CGFloat = 0.0
+    // var currentKeyboardHeight:CGFloat = 0.0
 
 
 
@@ -90,22 +90,31 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
 
 
+
+
     //
     // UITableViewDataSource methods.
     //
 
+    // This is called while building the table.
     func numberOfSectionsInTableView(entriesTable: UITableView) -> Int {
         // print("Returning number of sections in table view.")
         return 1
     }
 
 
+
+    // This is also called while building the table.
     func tableView(entriesTable: UITableView, numberOfRowsInSection section: Int) -> Int {
         // print("Returning number of rows: \(entries.count + numberRowsToInsert)")
         return (entries.count + numberRowsToInsert)
     }
 
 
+
+    // This builds and returns the table cell for the given table at the given row index.
+    // The number of times this is called depends on the number of rows.
+    // It will be called on as as-needed basis: whenever the table view needs new rows, this is called.
     func tableView(entriesTable: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         // print("Building new cell for table at \(indexPath.section):\(indexPath.row) / \(numberRowsToInsert).")
 
@@ -130,16 +139,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             entriesTable.rowHeight = UITableViewAutomaticDimension;
             entriesTable.estimatedRowHeight = 10.0;
 
-            //            if entry.value == nil {
-            //                cell.entryValueDisplay.text = "Empty : ("
-            //                cell.entryTagsDisplay.text = "No tags."
-            //            }
-            //            else {
-                // print("New label: \(entries[row].value!.string)")
-
-                cell.entryValueDisplay.text = entry.value.string
-                cell.entryTagsDisplay.text = entry.tags.join(", ")
-            // }
+            cell.entryValueDisplay.text = entry.value.string
+            cell.entryTagsDisplay.text = entry.tags.join(", ")
 
             // print("Returning cell for row \(row) with label: \(cell.entryValueDisplay.text!)")
             return cell
@@ -164,6 +165,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
 
 
+
     //
     // UITableViewDelegate methods.
     //
@@ -174,12 +176,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let row = indexPath.row
 
         print("Do something with this: \(entries[row].value.string)")
-    }
+        Entry.deduceActionFromValue(entries[row].value.string)
 
-    //    func textViewDidEndEditing(textView: UITextView) -> Bool {
-    //        print("Text view did end editing?")
-    //        return true
-    //    }
+        // UIApplication.sharedApplication().openURL(NSURL(string:entries[row].value.string)!)
+        // UIPasteboard.generalPasteboard().string = entries[row].value.string
+    }
 
 
 
@@ -197,9 +198,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
 
+
     @IBAction func entriesSearchBarEditDidBegin(sender: AnyObject) {
         print("Search bar text will begin editing!")
     }
+
 
 
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
@@ -208,15 +211,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
 
+
     @IBAction func entriesSearchBarTextDidChange(textField: UITextField) {
         print("Search bar text changed!")
         filterEntriesTable(textField.text!.lowercaseString)
     }
 
 
+
     func textFieldTextDidBeginEditing(textField: UITextField) {
         print("Search bar did begin editing.")
     }
+
 
 
     func textFieldShouldEndEditing(textField: UITextField) -> Bool {
@@ -225,15 +231,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
 
+
     func textFieldTextDidEndEditing(textField: UITextField) {
         print("Seach bar text did end editing.")
     }
+
 
 
     func textFieldShouldClear(textField: UITextField) -> Bool {
         print("Search bar text should clear?")
         return true
     }
+
 
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -244,12 +253,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
 
+
     func entriesSearchBarClearText() {
         print("Clearing search bar text!")
 
         entriesSearchBar.text = ""
         filterEntriesTable("")
     }
+
 
 
     // It would save time if, rather than reloading the entries array every time,
@@ -303,14 +314,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
 
     //
-    // Default methods.
+    // Methods related to the keyboard.
     //
 
-    //    override func viewWillAppear(animated: Bool) {
-    //        super.viewWillAppear(animated)
-    //    }
-
-    // This is not yet perfect.  #HERE
     func keyboardWillShow(notification: NSNotification) {
         print("[Main VC] Keyboard will show!")
 
@@ -321,15 +327,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             entriesTable.contentInset = contentInsets
             entriesTable.scrollIndicatorInsets = contentInsets
         }
-
-        //        // If active text field is hidden by keyboard, scroll it so it's visible
-        //        // Your app might not need or want this behavior.
-        //        CGRect aRect = self.view.frame;
-        //        aRect.size.height -= kbSize.height;
-        //        if (!CGRectContainsPoint(aRect, activeField.frame.origin) ) {
-        //            [self.scrollView scrollRectToVisible:activeField.frame animated:YES];
-        //        }
     }
+
+
 
     func keyboardWillHide(notification: NSNotification) {
         print("Keyboard will hide!")
@@ -338,33 +338,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         entriesTable.contentInset = contentInsets
         entriesTable.scrollIndicatorInsets = contentInsets
     }
-    
-    
-    
-    override func viewWillDisappear(animated: Bool) {
-        print("[Main VC] View will disappear")
-        
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-        
-        super.viewWillDisappear(animated)
-    }
-    
-    
-    override func viewWillAppear(animated: Bool) {
-        print("[Main VC] View will appear")
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
-        
-        super.viewWillAppear(animated)
-    }
+
+
+
+
+
+    //
+    // View controller methods.
+    //
 
 
     // Do any additional setup after loading the view, typically from a nib.
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        StoreManager.copyFileFromBundleToSandbox()
+        // StoreManager.copyFileFromBundleToSandbox()
         self.entries = StoreManager.getEntries()!
 
         entriesTable.delegate = self
@@ -373,17 +361,43 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         entriesTable.separatorStyle = UITableViewCellSeparatorStyle.None;
 
         entriesSearchBar.delegate = self
-
-        // Is this necessary?
-        // Reload the table
-        // entriesTable.reloadData()
     }
+
+
+
+    override func viewWillAppear(animated: Bool) {
+        print("[Main VC] View will appear")
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+
+        super.viewWillAppear(animated)
+
+        // This repeats the entire process of building the table.
+        // When returning from the new entry form, this doesn't need to run.
+        // If it's possible to add only the new entry, that'd be best.
+        // entriesTable.beginUpdates()
+        // entriesTable.endUpdates()
+        entriesTable.reloadData()
+    }
+
+
+
+    override func viewWillDisappear(animated: Bool) {
+        print("[Main VC] View will disappear")
+
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+
+        super.viewWillDisappear(animated)
+    }
+
 
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+
 
 
     deinit {

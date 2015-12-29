@@ -142,6 +142,8 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
     // This function is connected to the SAVE button.
     // If the value field is empty, then the button will be inactive.
     // The button becomes active only when the field is valid.
+    // If the form submits successfully, then this will trigger
+    // the segue back to the main table view.
     @IBAction func saveNewEntryFromForm() {
         print("Need to save new entry!")
         
@@ -158,6 +160,9 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
             print("New entry value: \(entry.value.string)")
             print("New entry tags: \(entry.tags.join(", "))")
             print("New entry metadata: \(entry.metadata.join(", "))")
+
+            // This segues back to the main table display.
+            self.performSegueWithIdentifier("SegueTableToNewEntryForm", sender: nil)
         }
         else {
             print("Failed to save new entry to store : (")
