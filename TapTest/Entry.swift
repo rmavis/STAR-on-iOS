@@ -11,55 +11,6 @@ import Foundation
 class Entry {
 
 
-    // Pass this an entry's value.
-    // It will try to guess what you want to do with it.
-    static func deduceActionFromValue(value: String) -> (String, String?) {
-        // Reference: https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/Introduction/Introduction.html
-
-        let characterRange = NSMakeRange(0, value.characters.count)
-
-        // phone
-        do {
-            let regexPhoneNumber = try NSRegularExpression.init(
-                pattern: "^([0-9]+)?[- .]?\\(?([0-9]{3})\\)?[- .]?([0-9]{3})[- .]?([0-9]{4})$",
-                options: .CaseInsensitive
-            )
-
-            let matches = regexPhoneNumber.matchesInString(
-                value,
-                options: .Anchored,
-                range: characterRange
-            )
-
-            if matches.count > 0 {
-                // This prints the phone number.
-                print("Testing: \(regexPhoneNumber.stringByReplacingMatchesInString(value, options: .Anchored, range: characterRange, withTemplate: "$1$2$3$4"))")
-                
-                print("Matches: \(matches[0])")
-                for part in matches {
-                    print("Part: \(part)")
-                }
-                // return ("tel", matches.joinWithSeparator(""))
-            }
-            else {
-                print("No matches")
-            }
-        }
-
-        catch let error as NSError {
-            print("Error reading data from the store file:")
-            print(error)
-        }
-
-        return ("what", "ever")
-
-        // mailto
-        // web
-
-    }
-
-
-
     // The value is required.
     // The tags are optional -- if none are required, pass an empty array.
     static func createFromForm(value: String, tags: [String]) -> Entry {

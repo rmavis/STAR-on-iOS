@@ -23,6 +23,7 @@
 		818AFEAE1BBB4DCC00C3376D /* TableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818AFEAD1BBB4DCC00C3376D /* TableCellView.swift */; };
 		818AFEB01BBC70F100C3376D /* EntryFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818AFEAF1BBC70F100C3376D /* EntryFilter.swift */; };
 		818AFEB21BBC856F00C3376D /* TableCellNewEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818AFEB11BBC856F00C3376D /* TableCellNewEntry.swift */; };
+		927995791C33506B00F9ADC2 /* EntryAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927995781C33506B00F9ADC2 /* EntryAction.swift */; };
 		92A34F8A1C2A4B5700597298 /* EntryMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A34F891C2A4B5700597298 /* EntryMetadata.swift */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +67,7 @@
 		818AFEAD1BBB4DCC00C3376D /* TableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableCellView.swift; sourceTree = "<group>"; };
 		818AFEAF1BBC70F100C3376D /* EntryFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntryFilter.swift; sourceTree = "<group>"; };
 		818AFEB11BBC856F00C3376D /* TableCellNewEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableCellNewEntry.swift; sourceTree = "<group>"; };
+		927995781C33506B00F9ADC2 /* EntryAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntryAction.swift; sourceTree = "<group>"; };
 		92A34F891C2A4B5700597298 /* EntryMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntryMetadata.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -120,6 +122,7 @@
 				818AFE9F1BB9EDA900C3376D /* store */,
 				818AFE6D1BB9B7D400C3376D /* AppDelegate.swift */,
 				818AFE6F1BB9B7D400C3376D /* ViewController.swift */,
+				927995781C33506B00F9ADC2 /* EntryAction.swift */,
 				814F1B8F1BC0850F00324762 /* NewEntryFormViewController.swift */,
 				818AFEAF1BBC70F100C3376D /* EntryFilter.swift */,
 				818AFEAD1BBB4DCC00C3376D /* TableCellView.swift */,
@@ -294,6 +297,7 @@
 				814F1B901BC0850F00324762 /* NewEntryFormViewController.swift in Sources */,
 				818AFE701BB9B7D400C3376D /* ViewController.swift in Sources */,
 				818AFEB01BBC70F100C3376D /* EntryFilter.swift in Sources */,
+				927995791C33506B00F9ADC2 /* EntryAction.swift in Sources */,
 				818AFE6E1BB9B7D400C3376D /* AppDelegate.swift in Sources */,
 				818AFEAE1BBB4DCC00C3376D /* TableCellView.swift in Sources */,
 				818AFEA61BBA0A5100C3376D /* EntryTags.swift in Sources */,
