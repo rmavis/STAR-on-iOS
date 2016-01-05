@@ -32,9 +32,10 @@ class StoreManager: NSObject, NSFileManagerDelegate {
 
 
     static func filePath() -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
-        let documentsDirectory = paths[0]
-        return "\(documentsDirectory)/\(StoreManager.fileName)"
+        // let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        // let documentsDirectory = paths[0]
+        // return "\(documentsDirectory)/\(StoreManager.fileName)"
+        return NSBundle.mainBundle().pathForResource(StoreManager.fileName, ofType: nil)!
     }
 
 
