@@ -9,32 +9,6 @@
 import Foundation
 
 
-//
-// This is from https://github.com/hayashikun/Regex/blob/master/Regex/Regex.swift
-//
-extension String {
-    func extract(pattern: String, options: NSRegularExpressionOptions = .AnchorsMatchLines) -> [[String]] {
-        var allMatches = [[String]]()
-        guard let regex = try? NSRegularExpression(pattern: pattern, options: options) else {
-            return []
-        }
-        let nsStr = self as NSString
-        regex.enumerateMatchesInString(self, options: NSMatchingOptions(rawValue: 0), range: NSRange(location: 0, length: nsStr.length)) {
-            (result: NSTextCheckingResult?, flags, ptr) -> Void in
-            if let result = result {
-                var matches = [String]()
-                for index in 0...result.numberOfRanges - 1 {
-                    let range = result.rangeAtIndex(index)
-                    matches.append(nsStr.substringWithRange(range))
-                }
-                allMatches.append(matches)
-            }
-        }
-        return allMatches
-    }
-}
-
-
 class EntryAction {
 
     
@@ -45,42 +19,42 @@ class EntryAction {
     static func buildURL(value: String, action: String? = nil) -> (open: Bool, value: String) {
         // Reference: https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/Introduction/Introduction.html
         
-        let act: String
-        let val: String
-        
+        var act: String? = nil
+        var val: String? = nil
+
         // Phone numbers.
         if let _ = value.rangeOfString("^[0-9]+?[- .]?\\(?[0-9]{3}\\)?[- .]?[0-9]{3}[- .]?[0-9]{4}$", options: .RegularExpressionSearch) {
             act = (action == nil) ? "tel" : action!
             val = EntryAction.cleanPhoneNumber(value)
+            return (true, "\(act!):\(val!)")
         }
         
         // Email addresses.
         else if let _ = value.rangeOfString("^[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\\.[A-Za-z]{2,}$", options: .RegularExpressionSearch) {
             act = (action == nil) ? "mailto" : action!
             val = value
-        }
-        
-        // URLs.
-        else if let urlMatch = EntryAction.getURLScheme(value) {
-            if let scheme = urlMatch.scheme {
-                act = (action == nil) ? scheme : action!
-            }
-            else {
-                act = (action == nil) ? "http://" : action!
-            }
-            val = value
+            return (true, "\(act!):\(val!)")
         }
 
         else {
-            act = "copy"
-            val = value
-        }
-        
-        if act == "copy" {
-            return (false, val)
-        }
-        else {
-            return (true, "\(act)://\(val)")
+            let parts = EntryAction.urlToParts(value)
+
+            // URLs have domains.
+            if let domain = parts.domain {
+                if let action = action {
+                    act = action
+                    val = (parts.uri == nil) ? domain : "\(domain)\(parts.uri!)"
+                }
+                else {
+                    act = (parts.scheme == nil) ? "http" : parts.scheme!
+                    val = (parts.uri == nil) ? domain : "\(domain)\(parts.uri!)"
+                }
+                return (true, "\(act!)://\(val!)")
+            }
+
+            else {
+                return (false, value)
+            }
         }
     }
     
@@ -101,27 +75,30 @@ class EntryAction {
     
     
     
-    static func getURLScheme(check: String) -> (matches: Bool, scheme: String?) {
-        var matches: Bool = false
+    static func urlToParts(check: String) -> (scheme: String?, domain: String?, uri: String?) {
         var scheme: String? = nil
+        var domain: String? = nil
+        var uri: String? = nil
         
         let patterns = [
             // Ordinary URLs. ASCII only. Will need to expand this.  #HERE
-            "^(([A-Za-z]+)://)?([A-Z0-9a-z.-]+\\.){1,}[A-Za-z]{2,}(\\/[^ ]*)?$",
+            "^(?:([-A-Z0-9a-z_]+):\\/\\/)?((?:[-A-Z0-9a-z_]+\\.){1,}[-A-Z0-9a-z_]{2,})(\\/[^ ]*)?$",
             // IPv4 addresses. Will need to expand for IPv6.  #HERE
-            "^(([A-Za-z]+)://)?([0-9]+\\.){3}[0-9]+\\/[^ ]+$"
+            "^(?:([-A-Z0-9a-z_]+):\\/\\/)?((?:[0-9]+\\.){3}[0-9]+)(\\/[^ ]*)?$"
         ]
         
         loop: for pattern in patterns {
             let groups = Regex.match(check, pattern)
-            if groups.count > 3 {
-                scheme = groups[2]
-                matches = true
+            if !groups.isEmpty {
+                // These will be strings or nil.
+                scheme = groups[1]
+                domain = groups[2]
+                uri = groups[3]
                 break loop
             }
         }
         
-        return (matches, scheme)
+        return (scheme, domain, uri)
     }
     
 }

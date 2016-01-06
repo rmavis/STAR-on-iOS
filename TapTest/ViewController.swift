@@ -178,10 +178,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         print("Do something with this: \(entries[row].value.string)")
 
         let act = EntryAction.buildURL(entries[row].value.string)
+
         if act.open == true {
-            UIApplication.sharedApplication().openURL(NSURL(string:act.value)!)
+            print("Acting on \"\(act.value)\"!")
+            UIApplication.sharedApplication().openURL(NSURL(string: act.value)!)
         }
         else {
+            print("Copying \"\(act.value)\" to clipboard")
             UIPasteboard.generalPasteboard().string = entries[row].value.string
         }
     }
