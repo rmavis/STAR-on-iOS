@@ -61,7 +61,7 @@ class EntryAction {
         }
         
         // URLs.
-        else if let urlMatch = EntryAction.checkURL(value) {
+        else if let urlMatch = EntryAction.getURLScheme(value) {
             if let scheme = urlMatch.scheme {
                 act = (action == nil) ? scheme : action!
             }
@@ -101,47 +101,27 @@ class EntryAction {
     
     
     
-    // This function is horribly written.  #HERE
-    static func checkURL(check: String) -> (matches: Bool, scheme: String?)? {
-        do {
-            let charPattern = "^([a-z]+://)?([0-9a-z.-]+\\.){1,}[a-z]{2,}(\\/[^ ]*)?$"
-            let charRegex = try NSRegularExpression.init(pattern: charPattern, options: .CaseInsensitive)
-            
-            if charRegex.numberOfMatchesInString(check, options: .Anchored, range: NSMakeRange(0, (check as NSString).length)) > 0 {
-                let scheme = check.extract("^([a-z]+://)")
-                if scheme.isEmpty {
-                    return (true, nil)
-                }
-                else {
-                    return (true, scheme[0][0])
-                }
-            }
-            
-            else {
-                let ipPattern = "^([a-z]+://)?([0-9]+\\.){3}[0-9]+\\/[^ ]+$"
-                let ipRegex = try NSRegularExpression.init(pattern: ipPattern, options: .CaseInsensitive)
-                    
-                if ipRegex.numberOfMatchesInString(check, options: .Anchored, range: NSMakeRange(0, (check as NSString).length)) > 0 {
-                    let scheme = check.extract("^([a-z]+://)")
-                    if scheme.isEmpty {
-                        return (true, nil)
-                    }
-                    else {
-                        return (true, scheme[0][0])
-                    }
-                }
-                    
-                else {
-                    return nil
-                }
+    static func getURLScheme(check: String) -> (matches: Bool, scheme: String?) {
+        var matches: Bool = false
+        var scheme: String? = nil
+        
+        let patterns = [
+            // Ordinary URLs. ASCII only. Will need to expand this.  #HERE
+            "^(([A-Za-z]+)://)?([A-Z0-9a-z.-]+\\.){1,}[A-Za-z]{2,}(\\/[^ ]*)?$",
+            // IPv4 addresses. Will need to expand for IPv6.  #HERE
+            "^(([A-Za-z]+)://)?([0-9]+\\.){3}[0-9]+\\/[^ ]+$"
+        ]
+        
+        loop: for pattern in patterns {
+            let groups = Regex.match(check, pattern)
+            if groups.count > 3 {
+                scheme = groups[2]
+                matches = true
+                break loop
             }
         }
         
-        catch let error as NSError {
-            print("Error building URL regex:")
-            print(error)
-            return nil
-        }
+        return (matches, scheme)
     }
     
 }
