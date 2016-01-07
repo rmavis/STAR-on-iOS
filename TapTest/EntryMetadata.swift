@@ -115,6 +115,13 @@ class EntryMetadata {
         
         return pool
     }
+
+
+
+    func updateOnSelect(addToAccessCount: Int = 1) {
+        setAccessCount(accessCount() + addToAccessCount)
+        setDateAccessed()
+    }
     
     
     

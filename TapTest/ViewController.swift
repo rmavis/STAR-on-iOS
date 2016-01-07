@@ -152,37 +152,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
 
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            print("Want to delete entry with value \(self.entries[indexPath.row].value.string)")
-
-            var bkEntries: [Entry] = [ ]
-            for (index, entry) in self.entries.enumerate() {
-                if index != indexPath.row {
-                    bkEntries.append(entry)
-                }
-            }
-
-            if let backupFilePath = StoreManager.makeBackupFile(bkEntries.reverse()) {
-                print("Created backup file '\(backupFilePath)'")
-
-                if StoreManager.replaceStoreWithBackup(backupFilePath) == true {
-                    // print("Successfully deleted entry from file.")
-                    // StoreManager.deleteBackupFile(backupFilePath)
-
-                    self.entries = bkEntries
-
-                    tableView.beginUpdates()
-                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Left)
-                    tableView.endUpdates()
-                }
-
-                else {
-                    print("Failed to delete entry from file.")
-                }
-            }
-
-            else {
-                print("Failed to make backup file. Aborting delete procedure.")
-            }
+            removeEntryFromStoreAndView(tableView, indexPath: indexPath)
         }
 
         else {
@@ -203,11 +173,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         entriesTable.deselectRowAtIndexPath(indexPath, animated: true)
 
         let row = indexPath.row
-
         let entry = self.entries[row]
         let rowValue = entry.value.string
-
-        // print("Do something with this: \(rowValue)")
 
         // Will also want to update the entry's metadata.  #HERE
 
@@ -221,6 +188,68 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             print("Acting on \"\(actionURL!)\"!")
             UIApplication.sharedApplication().openURL(NSURL(string: actionURL!)!)
         }
+
+        entry.metadata.updateOnSelect()
+        updateEntryInStoreAndView(entry, tableView: entriesTable, indexPath: indexPath)
+    }
+
+
+
+
+
+    //
+    // Methods related to inserting, editing, and deleting table rows.
+    //
+
+    func removeEntryFromStoreAndView(tableView: UITableView, indexPath: NSIndexPath) -> Bool {
+        print("Want to delete entry with value \(self.entries[indexPath.row].value.string)")
+
+        var bkEntries: [Entry] = [ ]
+        for (index, entry) in self.entries.enumerate() {
+            if index != indexPath.row {
+                bkEntries.append(entry)
+            }
+        }
+
+        let updated = StoreManager.updateStoreWithBackup(
+            bkEntries.reverse(),
+            wrapup: { () -> Void in
+                self.entries = bkEntries
+
+                tableView.beginUpdates()
+                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Left)
+                tableView.endUpdates()
+            })
+
+        return updated
+    }
+
+
+
+    func updateEntryInStoreAndView(newEntry: Entry, tableView: UITableView, indexPath: NSIndexPath) -> Bool {
+        print("Want to update entry with value \(newEntry.value.string)")
+
+        var bkEntries: [Entry] = [ ]
+        for (index, entry) in self.entries.enumerate() {
+            if index == indexPath.row {
+                bkEntries.append(newEntry)
+            }
+            else {
+                bkEntries.append(entry)
+            }
+        }
+
+        let updated = StoreManager.updateStoreWithBackup(
+            bkEntries.reverse(),
+            wrapup: { () -> Void in
+                self.entries = bkEntries
+
+                tableView.beginUpdates()
+                tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                tableView.endUpdates()
+        })
+
+        return updated
     }
 
 

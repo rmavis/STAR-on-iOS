@@ -113,6 +113,30 @@ class StoreManager: NSObject, NSFileManagerDelegate {
 
 
 
+    static func updateStoreWithBackup(entries: [Entry], wrapup: () -> Void) -> Bool {
+        if let backupFilePath = StoreManager.makeBackupFile(entries) {
+            print("Created backup file '\(backupFilePath)'")
+
+            if StoreManager.replaceStoreWithBackup(backupFilePath) == true {
+                print("Successfully deleted entry from file. Running wrapup function.")
+                wrapup()
+                return true
+            }
+
+            else {
+                print("Failed to replace store file with backup.")
+                return false
+            }
+        }
+
+        else {
+            print("Failed to make backup file.")
+            return false
+        }
+    }
+
+
+
     static func makeBackupFile(entries: [Entry]) -> String? {
         let filename = "\(StoreManager.fileName)_bk_\(Int(NSDate().timeIntervalSince1970))"
         let filepath = StoreManager.appendFilenameToDocumentsPath(filename)
