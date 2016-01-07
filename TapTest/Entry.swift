@@ -102,4 +102,10 @@ class Entry {
         ].joinWithSeparator(StoreManager.groupSeparator)
     }
 
+
+
+    func joinAndAddSeparator() -> String {
+        return join() + StoreManager.entrySeparator + "\n"
+    }
+
 }

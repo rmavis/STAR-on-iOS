@@ -16,89 +16,70 @@ class EntryAction {
     // If the URL scheme is nil, then the default will be used.
     // This will allow the user to select the action for each value, which the UI
     // should allow them to do on a long tap of the table cell.  #HERE
-    static func buildURL(value: String, action: String? = nil) -> (open: Bool, value: String) {
+    static func buildActionableURL(value: String, action: String? = nil) -> String? {
         // Reference: https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/Introduction/Introduction.html
-        
-        var act: String? = nil
-        var val: String? = nil
 
         // Phone numbers.
-        if let _ = value.rangeOfString("^[0-9]+?[- .]?\\(?[0-9]{3}\\)?[- .]?[0-9]{3}[- .]?[0-9]{4}$", options: .RegularExpressionSearch) {
-            act = (action == nil) ? "tel" : action!
-            val = EntryAction.cleanPhoneNumber(value)
-            return (true, "\(act!):\(val!)")
+        if let _ = value.rangeOfString(Regex.phoneNumberPattern, options: .RegularExpressionSearch) {
+            let act = (action == nil) ? "tel" : action!
+            return EntryAction.prefixWithScheme(act, value: Regex.numbersOnly(value))
         }
         
         // Email addresses.
-        else if let _ = value.rangeOfString("^[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\\.[A-Za-z]{2,}$", options: .RegularExpressionSearch) {
-            act = (action == nil) ? "mailto" : action!
-            val = value
-            return (true, "\(act!):\(val!)")
+        else if let _ = value.rangeOfString(Regex.emailAddressPattern, options: .RegularExpressionSearch) {
+            let act = (action == nil) ? "mailto" : action!
+            return EntryAction.prefixWithScheme(act, value: value)
         }
 
         else {
-            let parts = EntryAction.urlToParts(value)
+            // URLs or nil.
+            let parts = Regex.urlParts(value)
 
-            // URLs have domains.
-            if let domain = parts.domain {
-                if let action = action {
-                    act = action
-                    val = (parts.uri == nil) ? domain : "\(domain)\(parts.uri!)"
-                }
-                else {
-                    act = (parts.scheme == nil) ? "http" : parts.scheme!
-                    val = (parts.uri == nil) ? domain : "\(domain)\(parts.uri!)"
-                }
-                return (true, "\(act!)://\(val!)")
+            // If there is no domain, then it is not a URL.
+            if parts.domain == nil {
+                return nil
             }
-
             else {
-                return (false, value)
-            }
-        }
-    }
-    
-    
+                // If there is no action...
+                if action == nil {
+                    // ...and no scheme, then add the scheme.
+                    if parts.scheme == nil {
+                        return EntryAction.prefixWithScheme("http", value: value)
+                    }
+                    // ...but there is a scheme, then the URL is fine as-is.
+                    else {
+                        return value
+                    }
+                }
 
-    static func cleanPhoneNumber(dirty: String) -> String {
-        let ns_str = (dirty as NSString)
-        
-        let number = ns_str.stringByReplacingOccurrencesOfString(
-            "[^0-9]",
-            withString: "",
-            options: .RegularExpressionSearch,
-            range: NSMakeRange(0, ns_str.length)
-        )
-        
-        return number
-    }
-    
-    
-    
-    static func urlToParts(check: String) -> (scheme: String?, domain: String?, uri: String?) {
-        var scheme: String? = nil
-        var domain: String? = nil
-        var uri: String? = nil
-        
-        let patterns = [
-            // Ordinary URLs. ASCII only. Will need to expand this.  #HERE
-            "^(?:([-A-Z0-9a-z_]+):\\/\\/)?((?:[-A-Z0-9a-z_]+\\.){1,}[-A-Z0-9a-z_]{2,})(\\/[^ ]*)?$",
-            // IPv4 addresses. Will need to expand for IPv6.  #HERE
-            "^(?:([-A-Z0-9a-z_]+):\\/\\/)?((?:[0-9]+\\.){3}[0-9]+)(\\/[^ ]*)?$"
-        ]
-        
-        loop: for pattern in patterns {
-            let groups = Regex.match(check, pattern)
-            if !groups.isEmpty {
-                // These will be strings or nil.
-                scheme = groups[1]
-                domain = groups[2]
-                uri = groups[3]
-                break loop
+                // If the action is given...
+                else {
+                    // ...and it is the same as the scheme, then there's no need to add it.
+                    if parts.scheme == action {
+                        return value
+                    }
+                    // ...but it's different than the scheme, then add it.
+                    else {
+                        return EntryAction.prefixWithScheme(action!, value: value)
+                    }
+                }
             }
         }
-        
-        return (scheme, domain, uri)
+    }
+
+
+
+    // There will need to be handlers for each permissible action.  #HERE
+    static func prefixWithScheme(action: String, value: String) -> String {
+        if action == "tel" {
+            return "tel:\(value)"
+        }
+        else if action == "mailto" {
+            return "mailto:\(value)"
+        }
+        else {
+            return "\(action)://\(value)"
+        }
     }
     
 }

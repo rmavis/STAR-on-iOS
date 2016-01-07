@@ -363,7 +363,9 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
     // Functions that should run every time should be put in `viewWillAppear`.
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        StoreManager.ensureFileExists()  // This is lame.  #HERE
+
         // print("Loading new entry form view controller!")
 
         for field in [formValueField, formTagsField] {

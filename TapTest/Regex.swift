@@ -10,6 +10,16 @@ import Foundation
 
 class Regex {
 
+
+    static let phoneNumberPattern = "^[0-9]+?[- .]?\\(?[0-9]{3}\\)?[- .]?[0-9]{3}[- .]?[0-9]{4}$"
+    static let emailAddressPattern = "^[A-Z0-9a-z._%+-]+@[A-Z0-9a-z.-]+\\.[A-Za-z]{2,}$"
+    // Ordinary URLs. ASCII only. Will need to expand this.  #HERE
+    static let urlMatchingPattern = "^(?:([-A-Z0-9a-z_]+):\\/\\/)?((?:[-A-Z0-9a-z_]+\\.){1,}[-A-Z0-9a-z_]{2,})(\\/[^ ]*)?$"
+    // IPv4 addresses. Will need to expand for IPv6.  #HERE
+    static let ipv4MatchingPattern = "^(?:([-A-Z0-9a-z_]+):\\/\\/)?((?:[0-9]+\\.){3}[0-9]+)(\\/[^ ]*)?$"
+
+
+
     // Pass this a string, a match pattern, and optionally any match options.
     // It will return an array of matches according to the match pattern.
     // Capture groups that do not match will be `nil` in the returned array.
@@ -42,7 +52,48 @@ class Regex {
         
         return matches
     }
-    
+
+
+
+    static func numbersOnly(string: String) -> String {
+        let nsstr = string as NSString
+
+        let numbers = nsstr.stringByReplacingOccurrencesOfString(
+            "[^0-9]",
+            withString: "",
+            options: .RegularExpressionSearch,
+            range: NSMakeRange(0, nsstr.length)
+        )
+
+        return numbers
+    }
+
+
+
+    static func urlParts(check: String) -> (scheme: String?, domain: String?, uri: String?) {
+        var scheme: String? = nil
+        var domain: String? = nil
+        var uri: String? = nil
+
+        let patterns = [
+            Regex.urlMatchingPattern,
+            Regex.ipv4MatchingPattern
+        ]
+
+        loop: for pattern in patterns {
+            let groups = Regex.match(check, pattern)
+            if !groups.isEmpty {
+                // These will be strings or nil.
+                scheme = groups[1]
+                domain = groups[2]
+                uri = groups[3]
+                break loop
+            }
+        }
+
+        return (scheme, domain, uri)
+    }
+
 }
 
 

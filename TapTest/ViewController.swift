@@ -34,8 +34,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let tableEntryCellID = "EntryCell"
     let tableNewEntryCellID = "NewEntryCell"
 
-    // let entriesStore = StoreManager()
-
     var entries: [Entry] = [ ]
     var filteredEntriesCache: [EntryFilter] = [ ]
 
@@ -49,7 +47,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
 
     @IBAction func toggleSearchBar() {
-        print("Need to toggle search bar!")
+        // print("Need to toggle search bar!")
         
         if (entriesSearchBarBox.hidden == true) {
             // print("Appearing search bar")
@@ -106,8 +104,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     // This is also called while building the table.
     func tableView(entriesTable: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // print("Returning number of rows: \(entries.count + numberRowsToInsert)")
-        return (entries.count + numberRowsToInsert)
+        //        print("Returning number of rows: \(entries.count + numberRowsToInsert)")
+        //        return (entries.count + numberRowsToInsert)
+        print("Returning number of rows: \(self.entries.count)")
+        return self.entries.count
     }
 
 
@@ -129,8 +129,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             let cell = entriesTable.dequeueReusableCellWithIdentifier(tableEntryCellID, forIndexPath: indexPath) as! TableCellView
 
             let row = indexPath.row
-            let entry = entries[row]
 
+            let entry = self.entries[row]
             // These lines size the row according to the row's content.
             // The real work of sizing the row is done by the constraints
             // on the interface elements, but these two lines are needed.
@@ -150,12 +150,41 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
 
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        let row = indexPath.row
-        let entry = entries[row]
 
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            print("Want to delete entry with value \(entry.value.string)")
+            print("Want to delete entry with value \(self.entries[indexPath.row].value.string)")
+
+            var bkEntries: [Entry] = [ ]
+            for (index, entry) in self.entries.enumerate() {
+                if index != indexPath.row {
+                    bkEntries.append(entry)
+                }
+            }
+
+            if let backupFilePath = StoreManager.makeBackupFile(bkEntries.reverse()) {
+                print("Created backup file '\(backupFilePath)'")
+
+                if StoreManager.replaceStoreWithBackup(backupFilePath) == true {
+                    // print("Successfully deleted entry from file.")
+                    // StoreManager.deleteBackupFile(backupFilePath)
+
+                    self.entries = bkEntries
+
+                    tableView.beginUpdates()
+                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Left)
+                    tableView.endUpdates()
+                }
+
+                else {
+                    print("Failed to delete entry from file.")
+                }
+            }
+
+            else {
+                print("Failed to make backup file. Aborting delete procedure.")
+            }
         }
+
         else {
             print("Want to insert")
         }
@@ -175,17 +204,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         let row = indexPath.row
 
-        print("Do something with this: \(entries[row].value.string)")
+        let entry = self.entries[row]
+        let rowValue = entry.value.string
 
-        let act = EntryAction.buildURL(entries[row].value.string)
+        // print("Do something with this: \(rowValue)")
 
-        if act.open == true {
-            print("Acting on \"\(act.value)\"!")
-            UIApplication.sharedApplication().openURL(NSURL(string: act.value)!)
+        // Will also want to update the entry's metadata.  #HERE
+
+        let actionURL = EntryAction.buildActionableURL(rowValue)
+
+        if actionURL == nil {
+            print("Copying \"\(rowValue)\" to clipboard")
+            UIPasteboard.generalPasteboard().string = rowValue
         }
         else {
-            print("Copying \"\(act.value)\" to clipboard")
-            UIPasteboard.generalPasteboard().string = entries[row].value.string
+            print("Acting on \"\(actionURL!)\"!")
+            UIApplication.sharedApplication().openURL(NSURL(string: actionURL!)!)
         }
     }
 
@@ -281,7 +315,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         var filteredEntries: [Entry] = [ ]
 
         if searchString == "" {
-            filteredEntries = StoreManager.getEntries()!
+            filteredEntries = StoreManager.getEntries()
             self.filteredEntriesCache = [ ]
         }
 
@@ -300,7 +334,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
 
             if (filteredEntries.count == 0) {
-                for entry in entries {
+                for entry in self.entries {
                     if entry.match(searchString) {
                         filteredEntries.append(entry)
                     }
@@ -359,8 +393,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // StoreManager.copyFileFromBundleToSandbox()
-        self.entries = StoreManager.getEntries()!
+        StoreManager.ensureFileExists()  // This is lame.  #HERE
+        self.entries = StoreManager.getEntries()
 
         entriesTable.delegate = self
         entriesTable.dataSource = self

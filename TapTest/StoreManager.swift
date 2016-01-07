@@ -1,5 +1,5 @@
 //
-//  FileManager.swift
+//  StoreManager.swift
 //  TapTest
 //
 //  Created by Richard Mavis on 9/28/15.
@@ -29,20 +29,24 @@ class StoreManager: NSObject, NSFileManagerDelegate {
     // This separates parts of a group.
     static let unitSeparator: String = "\u{001F}"
 
+    // This is the ASCII delete control code.
+    // This is used to mark entries for deletion.
+    static let deleteCode: String = "\u{007F}"
 
 
-    static func filePath() -> String {
-        // let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
-        // let documentsDirectory = paths[0]
-        // return "\(documentsDirectory)/\(StoreManager.fileName)"
-        return NSBundle.mainBundle().pathForResource(StoreManager.fileName, ofType: nil)!
+
+    static func appendFilenameToDocumentsPath(fileName: String = StoreManager.fileName) -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        let documentsDirectory = paths[0]
+
+        return "\(documentsDirectory)/\(fileName)"
     }
 
 
 
     static func readDataFromFile() -> String? {
         do {
-            let dataString = try String(contentsOfFile: StoreManager.filePath(), encoding: NSUTF8StringEncoding)
+            let dataString = try String(contentsOfFile: StoreManager.appendFilenameToDocumentsPath(), encoding: NSUTF8StringEncoding)
             return dataString
         }
 
@@ -55,14 +59,15 @@ class StoreManager: NSObject, NSFileManagerDelegate {
 
 
 
-    static func getEntries() -> [Entry]? {
+    static func getEntries() -> [Entry] {
+        var entriesMade = [Entry]()
+
         if let dataString = StoreManager.readDataFromFile() {
-            // print("data read: \(stringData)")
+            // print("data read: \(dataString)")
 
             let entriesRead = dataString.componentsSeparatedByString(StoreManager.entrySeparator)
-            // print("Read \(groups.count) groups from file.")
+            // print("Read \(entriesRead.count) groups from file.")
 
-            var entriesMade: [Entry] = [ ]
             for group in entriesRead {
                 if let entry_check = Entry.checkStringForm(group) {
                     entriesMade.append(entry_check)
@@ -76,7 +81,8 @@ class StoreManager: NSObject, NSFileManagerDelegate {
         }
 
         else {
-            return nil
+            print("Failed to read data from file.")
+            return entriesMade
         }
     }
 
@@ -85,14 +91,13 @@ class StoreManager: NSObject, NSFileManagerDelegate {
     static func appendEntryToFile(entry: Entry) -> Bool {
         print("Need to save entry to file!")
 
-        if let fileHandle = NSFileHandle.init(forUpdatingAtPath: StoreManager.filePath()) {
-            let entry = StoreManager.entrySeparator + entry.join()
+        if let fileHandle = NSFileHandle.init(forUpdatingAtPath: StoreManager.appendFilenameToDocumentsPath()) {
+            let entryString = entry.joinAndAddSeparator()
 
-            print("Adding \(entry)")
-            print("To \(StoreManager.filePath())")
+            print("Adding \(entryString) to \(StoreManager.appendFilenameToDocumentsPath())")
 
             fileHandle.seekToEndOfFile()
-            fileHandle.writeData(entry.dataUsingEncoding(NSUTF8StringEncoding)!)
+            fileHandle.writeData(entryString.dataUsingEncoding(NSUTF8StringEncoding)!)
             fileHandle.closeFile()
 
             // This is only for testing  #HERE
@@ -108,45 +113,119 @@ class StoreManager: NSObject, NSFileManagerDelegate {
 
 
 
-    // This is pointless because it copies from the virtual, sandboxed bundle
-    // to the virtual, sandboxed app in the virtual machine. It never touches
-    // the store file relative to this file.
+    static func makeBackupFile(entries: [Entry]) -> String? {
+        let filename = "\(StoreManager.fileName)_bk_\(Int(NSDate().timeIntervalSince1970))"
+        let filepath = StoreManager.appendFilenameToDocumentsPath(filename)
 
-    static func copyFileFromBundleToSandbox() {
-        do {
-            let storeManager = StoreManager()
+        // print("Need to make a backup file at '\(filepath)'!")
+        let storeManager = StoreManager()
+        let fileManager = storeManager.fileManager
 
-            try storeManager.fileManager.copyItemAtPath(
-                NSBundle.mainBundle().pathForResource(StoreManager.fileName, ofType: nil)!,
-                toPath: StoreManager.filePath()
-            )
+        if fileManager.createFileAtPath(filepath, contents: nil, attributes: nil) {
+            if let fileHandle = NSFileHandle.init(forWritingAtPath: filepath) {
+                print("Writing \(entries.count) entries to backup file.")
+                
+                for entry in entries {
+                    fileHandle.writeData("\(entry.join())\(entrySeparator)\n".dataUsingEncoding(NSUTF8StringEncoding)!)
+                }
 
-            print("Copied store file from bundle to sandbox.")
+                fileHandle.closeFile()
+
+                return filepath
+            }
+                
+            else {
+                return nil
+            }
         }
 
-        catch let error as NSError {
-            print("Error copying bundle file to the sandbox.")
-            print(error)
+        else {
+            return nil
         }
     }
 
 
-    static func copyFileFromSandboxToBundle() {
+
+    static func replaceStoreWithBackup(from: String, to: String = StoreManager.appendFilenameToDocumentsPath()) -> Bool {
         do {
             let storeManager = StoreManager()
+            try storeManager.fileManager.moveItemAtPath(from, toPath: to)
+            print("Replaced '\(to)' with '\(from)'.")
 
-            try storeManager.fileManager.copyItemAtPath(
-                StoreManager.filePath(),
-                toPath: NSBundle.mainBundle().pathForResource(StoreManager.fileName, ofType: nil)!
-            )
-
-            print("Copied store file from sandbox to bundle.")
+            // This is only for testing  #HERE
+            StoreManager.copyFileFromSandboxToBundle()
+            return true
         }
 
         catch let error as NSError {
-            print("Error copying sandbox file to the bundle.")
-            print(error)
+            print("Error replacing file from '\(from)' to '\(to)':\n\(error)")
+            return false
         }
+    }
+
+
+
+    static func deleteBackupFile(filepath: String) -> Bool {
+        print("Deleting backup file at '\(filepath)'")
+
+        do {
+            let storeManager = StoreManager()
+            try storeManager.fileManager.removeItemAtPath(filepath)
+            return true
+        }
+
+        catch let error as NSError {
+            print("Error deleting file at '\(filepath)':\n\(error)")
+            return false
+        }
+    }
+
+
+
+    static func ensureFileExists() {
+        print("Ensuring file exists!")
+
+        let storeManager = StoreManager()
+        let fileManager = storeManager.fileManager
+        
+        if fileManager.fileExistsAtPath(StoreManager.appendFilenameToDocumentsPath()) {
+            print("Store file exists: \(StoreManager.appendFilenameToDocumentsPath())")
+        }
+        else {
+            print("Store file does not exist.")
+            StoreManager.copyFileFromBundleToSandbox()
+        }
+    }
+
+
+
+    static func copyFile(from: String, to: String = StoreManager.appendFilenameToDocumentsPath()) -> Bool {
+        do {
+            let storeManager = StoreManager()
+            try storeManager.fileManager.copyItemAtPath(from, toPath: to)
+            print("Copied store file from '\(from)' to '\(to)'.")
+            return true
+        }
+
+        catch let error as NSError {
+            print("Error copying file from '\(from)' to '\(to)':\n\(error)")
+            return false
+        }
+    }
+
+
+    static func copyFileFromBundleToSandbox() {
+        StoreManager.copyFile(
+            NSBundle.mainBundle().pathForResource(StoreManager.fileName, ofType: nil)!,
+            to: StoreManager.appendFilenameToDocumentsPath()
+        )
+    }
+
+    static func copyFileFromSandboxToBundle() {
+        StoreManager.copyFile(
+            StoreManager.appendFilenameToDocumentsPath(),
+            to: NSBundle.mainBundle().pathForResource(StoreManager.fileName, ofType: nil)!
+        )
     }
 
 
@@ -168,6 +247,8 @@ class StoreManager: NSObject, NSFileManagerDelegate {
         super.init()
 
         self.fileManager.delegate = self
+
+        // StoreManager.ensureFileExists()
     }
 
 
@@ -179,13 +260,39 @@ class StoreManager: NSObject, NSFileManagerDelegate {
         return true
     }
 
-    func fileManager(fileManager: NSFileManager, shouldCopyItemAtURL srcURL: NSURL, toURL dstURL: NSURL) -> Bool {
-        // print("Should proceed with copying from \(srcURL) to \(dstURL)? You betcha.")
+
+    //    func fileManager(fileManager: NSFileManager, shouldCopyItemAtURL srcURL: NSURL, toURL dstURL: NSURL) -> Bool {
+    //        print("Should proceed with copying from \(srcURL) to \(dstURL)? You betcha.")
+    //        return true
+    //    }
+
+    func fileManager(fileManager: NSFileManager, shouldCopyItemAtPath srcPath: String, toPath dstPath: String) -> Bool {
+        print("Should proceed with copying from \(srcPath) to \(dstPath)? You betcha.")
         return true
     }
 
-    /*
-    Should proceed with copying from /Users/rfm/Library/Developer/CoreSimulator/Devices/BB0D9A98-B3A8-43C5-97E6-3E8FF32FC32D/data/Containers/Bundle/Application/CC22DAD4-6CBF-479D-B480-F6F171B418C5/TapTest.app/store to /Users/rfm/Library/Developer/CoreSimulator/Devices/BB0D9A98-B3A8-43C5-97E6-3E8FF32FC32D/data/Containers/Data/Application/C6953432-28C9-44C0-BC6D-DF1B8EA8C2FD/Documents/store? You betcha.
-    */
+
+    func fileManager(fileManager: NSFileManager, shouldMoveItemAtPath srcPath: String, toPath dstPath: String) -> Bool {
+        print("Should proceed with moving from \(srcPath) to \(dstPath)? You betcha.")
+        return true
+    }
+
+
+    func fileManager(fileManager: NSFileManager, shouldProceedAfterError error: NSError, movingItemAtPath srcPath: String, toPath dstPath: String) -> Bool {
+        print("Should proceed with moving from \(srcPath) to \(dstPath)? You betcha.")
+        return true
+    }
+
+
+    func fileManager(fileManager: NSFileManager, shouldRemoveItemAtPath path: String) -> Bool {
+        if path == StoreManager.appendFilenameToDocumentsPath() {
+            print("Delegate disapproving deletion of store file.")
+            return false
+        }
+        else {
+            print("Delegate approving deletion of file at '\(path)'")
+            return true
+        }
+    }
 
 }
