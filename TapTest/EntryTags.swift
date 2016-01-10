@@ -80,7 +80,7 @@ class EntryTags {
         var matches: Bool = false
 
         for tag in self.pool {
-            print("Checking \(tag.lowercaseString) against \(searchString)")
+            // print("Checking \(tag.lowercaseString) against \(searchString)")
 
             if (tag.lowercaseString.rangeOfString(searchString, options: .RegularExpressionSearch) != nil) {
                 matches = true

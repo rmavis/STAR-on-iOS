@@ -69,11 +69,11 @@ class StoreManager: NSObject, NSFileManagerDelegate {
             // print("Read \(entriesRead.count) groups from file.")
 
             for group in entriesRead {
-                if let entry_check = Entry.checkStringForm(group) {
+                if let entry_check = Entry.createFromString(group) {
                     entriesMade.append(entry_check)
                 }
                 else {
-                    print("Entry is not well-formed! Skipping.")
+                    // print("Entry is not well-formed! Skipping.")
                 }
             }
 
@@ -89,12 +89,12 @@ class StoreManager: NSObject, NSFileManagerDelegate {
 
 
     static func appendEntryToFile(entry: Entry) -> Bool {
-        print("Need to save entry to file!")
+        // print("Need to save entry to file!")
 
         if let fileHandle = NSFileHandle.init(forUpdatingAtPath: StoreManager.appendFilenameToDocumentsPath()) {
             let entryString = entry.joinAndAddSeparator()
 
-            print("Adding \(entryString) to \(StoreManager.appendFilenameToDocumentsPath())")
+            // print("Adding \(entryString) to \(StoreManager.appendFilenameToDocumentsPath())")
 
             fileHandle.seekToEndOfFile()
             fileHandle.writeData(entryString.dataUsingEncoding(NSUTF8StringEncoding)!)
@@ -113,13 +113,12 @@ class StoreManager: NSObject, NSFileManagerDelegate {
 
 
 
-    static func updateStoreWithBackup(entries: [Entry], wrapup: () -> Void) -> Bool {
+    static func updateStoreWithBackup(entries: [Entry]) -> Bool {
         if let backupFilePath = StoreManager.makeBackupFile(entries) {
-            print("Created backup file '\(backupFilePath)'")
+            // print("Created backup file '\(backupFilePath)'")
 
             if StoreManager.replaceStoreWithBackup(backupFilePath) == true {
-                print("Successfully deleted entry from file. Running wrapup function.")
-                wrapup()
+                // print("Successfully deleted entry from file. Running wrapup function.")
                 return true
             }
 
@@ -147,7 +146,7 @@ class StoreManager: NSObject, NSFileManagerDelegate {
 
         if fileManager.createFileAtPath(filepath, contents: nil, attributes: nil) {
             if let fileHandle = NSFileHandle.init(forWritingAtPath: filepath) {
-                print("Writing \(entries.count) entries to backup file.")
+                // print("Writing \(entries.count) entries to backup file.")
                 
                 for entry in entries {
                     fileHandle.writeData("\(entry.join())\(entrySeparator)\n".dataUsingEncoding(NSUTF8StringEncoding)!)
@@ -174,7 +173,7 @@ class StoreManager: NSObject, NSFileManagerDelegate {
         do {
             let storeManager = StoreManager()
             try storeManager.fileManager.moveItemAtPath(from, toPath: to)
-            print("Replaced '\(to)' with '\(from)'.")
+            // print("Replaced '\(to)' with '\(from)'.")
 
             // This is only for testing  #HERE
             StoreManager.copyFileFromSandboxToBundle()
@@ -190,7 +189,7 @@ class StoreManager: NSObject, NSFileManagerDelegate {
 
 
     static func deleteBackupFile(filepath: String) -> Bool {
-        print("Deleting backup file at '\(filepath)'")
+        // print("Deleting backup file at '\(filepath)'")
 
         do {
             let storeManager = StoreManager()
@@ -207,13 +206,13 @@ class StoreManager: NSObject, NSFileManagerDelegate {
 
 
     static func ensureFileExists() {
-        print("Ensuring file exists!")
+        // print("Ensuring file exists!")
 
         let storeManager = StoreManager()
         let fileManager = storeManager.fileManager
         
         if fileManager.fileExistsAtPath(StoreManager.appendFilenameToDocumentsPath()) {
-            print("Store file exists: \(StoreManager.appendFilenameToDocumentsPath())")
+            // print("Store file exists: \(StoreManager.appendFilenameToDocumentsPath())")
         }
         else {
             print("Store file does not exist.")
@@ -227,7 +226,7 @@ class StoreManager: NSObject, NSFileManagerDelegate {
         do {
             let storeManager = StoreManager()
             try storeManager.fileManager.copyItemAtPath(from, toPath: to)
-            print("Copied store file from '\(from)' to '\(to)'.")
+            // print("Copied store file from '\(from)' to '\(to)'.")
             return true
         }
 
@@ -291,30 +290,30 @@ class StoreManager: NSObject, NSFileManagerDelegate {
     //    }
 
     func fileManager(fileManager: NSFileManager, shouldCopyItemAtPath srcPath: String, toPath dstPath: String) -> Bool {
-        print("Should proceed with copying from \(srcPath) to \(dstPath)? You betcha.")
+        // print("Should proceed with copying from \(srcPath) to \(dstPath)? You betcha.")
         return true
     }
 
 
     func fileManager(fileManager: NSFileManager, shouldMoveItemAtPath srcPath: String, toPath dstPath: String) -> Bool {
-        print("Should proceed with moving from \(srcPath) to \(dstPath)? You betcha.")
+        // print("Should proceed with moving from \(srcPath) to \(dstPath)? You betcha.")
         return true
     }
 
 
     func fileManager(fileManager: NSFileManager, shouldProceedAfterError error: NSError, movingItemAtPath srcPath: String, toPath dstPath: String) -> Bool {
-        print("Should proceed with moving from \(srcPath) to \(dstPath)? You betcha.")
+        // print("Should proceed with moving from \(srcPath) to \(dstPath)? You betcha.")
         return true
     }
 
 
     func fileManager(fileManager: NSFileManager, shouldRemoveItemAtPath path: String) -> Bool {
         if path == StoreManager.appendFilenameToDocumentsPath() {
-            print("Delegate disapproving deletion of store file.")
+            // print("Delegate disapproving deletion of store file.")
             return false
         }
         else {
-            print("Delegate approving deletion of file at '\(path)'")
+            // print("Delegate approving deletion of file at '\(path)'")
             return true
         }
     }

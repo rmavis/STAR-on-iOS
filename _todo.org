@@ -1,15 +1,16 @@
-* Build [2/10]
+* Build [4/11]
 ** DONE Reverse order of entries?
    So additions are on top.
 ** DONE Add entry [3/3]
    - [X] Create entry
    - [X] Save entry to file
    - [X] Add entry to view
-** TODO Delete entry
+** DONE Delete entry
+** DONE Open / copy default actions
 ** TODO Edit entry
-** TODO Open / copy actions
-** TODO Tags view?
+** TODO Long tap for action selection
 ** TODO Highlight matching search string
+** TODO Tags view?
 ** TODO Dropbox
 ** TODO Icon
 ** TODO Test on different screens
@@ -18,6 +19,24 @@
    - [ ] [[https://developer.apple.com/library/ios/documentation/IDEs/Conceptual/AppDistributionGuide/TestingYouriOSApp/TestingYouriOSApp.html][Install on phone]]
 
 
-* Refactor [0/2]
+* Refactor [1/3]
+** DONE Q: When reading entries from file, don't need to append then reverse array? A: No.
 ** TODO Review ViewController class
-** TODO When reading entries from file, don't need to append then reverse array?
+** TODO Figure out why scrolling the table is janky and occasionally breaks
+2016-01-09 22:57:18.114 TapTest[21629:12550719] Unable to simultaneously satisfy constraints.
+	Probably at least one of the constraints in the following list is one you don't want. 
+	Try this: 
+		(1) look at each constraint and try to figure out which you don't expect; 
+		(2) find the code that added the unwanted constraint or constraints and fix it. 
+(
+    "<NSLayoutConstraint:0x7ff203f3c560 V:|-(30)-[UILabel:0x7ff203f3b980'alter table \\`TABLE\\` add...']   (Names: '|':UITableViewCellContentView:0x7ff203f3b250 )>",
+    "<NSLayoutConstraint:0x7ff203f3c5b0 UILabel:0x7ff203f3bde0'mysql, add column'.bottom == UITableViewCellContentView:0x7ff203f3b250.bottom - 30>",
+    "<NSLayoutConstraint:0x7ff203f3c6a0 V:[UILabel:0x7ff203f3b980'alter table \\`TABLE\\` add...']-(10)-[UILabel:0x7ff203f3bde0'mysql, add column']>",
+    "<NSLayoutConstraint:0x7ff203f3e7f0 'UIView-Encapsulated-Layout-Height' V:[UITableViewCellContentView:0x7ff203f3b250(10)]>"
+)
+
+Will attempt to recover by breaking constraint 
+<NSLayoutConstraint:0x7ff203f3c6a0 V:[UILabel:0x7ff203f3b980'alter table \`TABLE\` add...']-(10)-[UILabel:0x7ff203f3bde0'mysql, add column']>
+
+Make a symbolic breakpoint at UIViewAlertForUnsatisfiableConstraints to catch this in the debugger.
+The methods in the UIConstraintBasedLayoutDebugging category on UIView listed in <UIKit/UIView.h> may also be helpful.

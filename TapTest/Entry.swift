@@ -10,6 +10,18 @@ import Foundation
 
 class Entry {
 
+    // This is a running counter of each Entry created.
+    // IDing each Entry allows for easy/accurate updating of the caches
+    // in the View Manager.
+    static var refIdCount: Int = 0
+
+
+    static func incrementRefId() -> Int {
+        Entry.refIdCount += 1
+        return Entry.refIdCount
+    }
+
+
 
     // The value is required.
     // The tags are optional -- if none are required, pass an empty array.
@@ -23,7 +35,7 @@ class Entry {
     
     
     // This will check if the given String looks like an entry from the store.
-    static func checkStringForm(group: String) -> Entry? {
+    static func createFromString(group: String) -> Entry? {
         let groups = group.componentsSeparatedByString(StoreManager.groupSeparator)
         // print("Line has \(groups.count) groups.")
         
@@ -51,12 +63,15 @@ class Entry {
     let value: EntryValue
     let tags: EntryTags
     let metadata: EntryMetadata
+    let refId: Int
 
     
     
     // An Entry can be created when all the parameters are Strings.
     // This is useful for reading Entries from the store.
     init(value: String, tags: String, metadata: String) {
+        self.refId = Entry.incrementRefId()
+
         self.value = EntryValue(part: value)
         self.tags = EntryTags(group: tags)
         self.metadata = EntryMetadata(group: metadata)
@@ -67,6 +82,8 @@ class Entry {
     // An Entry can be created when the tags are an Array of Strings.
     // This is useful when saving a new entry from the form.
     init(value: String, tags: [String]) {
+        self.refId = Entry.incrementRefId()
+
         self.value = EntryValue(part: value)
         self.tags = EntryTags(group: tags)
 
