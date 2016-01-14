@@ -37,6 +37,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     static let animationDelay = 0.0
     static let animationDuration = 0.2
 
+    var selectedEntry: Entry? = nil
+
 
 
 
@@ -46,7 +48,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //
 
     // This is the main store for the Entries.
-    // The entire collection is keyed on the empty string, "".
+    // The envare collection is keyed on the empty string, "".
     // While searching, cache entries will be created and deleted,
     // each keyed on the search term.
     var entriesCache: [String: [Entry]] = [:]
@@ -303,6 +305,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     func delegateTableCellEditAction(rowAction: UITableViewRowAction, indexPath: NSIndexPath) -> Void {
         print("Need to delegate table cell editing action!")
+
+        if let cache = getCurrentEntriesCache() {
+            self.selectedEntry = cache[indexPath.row]
+            self.performSegueWithIdentifier("SegueEntryFormToTable", sender: nil)
+            // After this, `prepareForSegue` will be called.
+            // That function sets `selectedEntry` back to nil.
+        }
+        else {
+            print("Major problem: no cache.")
+        }
     }
 
 
@@ -580,6 +592,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+
+
+
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == "SegueEntryFormToTable") {
+            if self.selectedEntry != nil {
+                print("Seguing to entry form with \(self.selectedEntry!.value.string)!")
+                let formVC = segue.destinationViewController as! EntryFormViewController;
+                formVC.entryToEdit = self.selectedEntry
+                self.selectedEntry = nil
+            }
+        }
     }
     
     

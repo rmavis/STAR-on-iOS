@@ -69,7 +69,7 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="ScC-Xw-xa0" kind="show" id="2Je-N4-Jmu"/>
+                                            <segue destination="ScC-Xw-xa0" kind="show" identifier="SegueEntryFormToTable" id="2Je-N4-Jmu"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sje-CE-vTr">
@@ -203,10 +203,10 @@
             </objects>
             <point key="canvasLocation" x="-66" y="232"/>
         </scene>
-        <!--New Entry Form View Controller-->
+        <!--Entry Form View Controller-->
         <scene sceneID="wA3-n2-F8U">
             <objects>
-                <viewController id="ScC-Xw-xa0" customClass="NewEntryFormViewController" customModule="TapTest" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ScC-Xw-xa0" customClass="EntryFormViewController" customModule="TapTest" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8d6-DW-1zx"/>
                         <viewControllerLayoutGuide type="bottom" id="zIQ-Gt-OKf"/>
@@ -229,7 +229,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="saveNewEntryFromForm" destination="ScC-Xw-xa0" eventType="touchUpInside" id="98X-NP-BCR"/>
+                                            <action selector="delegateFormSaveAction" destination="ScC-Xw-xa0" eventType="touchUpInside" id="uoE-gG-vfH"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FlO-Z1-iuf">
@@ -360,15 +360,15 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="entryForm" destination="CSr-2I-oUT" id="xS9-oh-uUZ"/>
                         <outlet property="entryFormBorder" destination="0LT-GO-7PC" id="Bw9-Mf-Qor"/>
+                        <outlet property="entryFormScrollContainer" destination="YBJ-OG-VnO" id="HfJ-gw-rcT"/>
+                        <outlet property="entryFormScrollFrame" destination="DaS-C9-uWy" id="rRK-Zm-kSB"/>
                         <outlet property="formButtonsBox" destination="RTF-LZ-bhp" id="W1X-4F-f0m"/>
                         <outlet property="formCancelButton" destination="FlO-Z1-iuf" id="3MX-Tz-kQj"/>
                         <outlet property="formSaveButton" destination="QgU-y1-rP8" id="Ovq-rp-Hln"/>
                         <outlet property="formTagsField" destination="Epx-c8-Bef" id="hIg-TP-Uyn"/>
                         <outlet property="formValueField" destination="rqN-iF-dWF" id="5ss-h4-diB"/>
-                        <outlet property="newEntryForm" destination="CSr-2I-oUT" id="yDE-9r-puX"/>
-                        <outlet property="newEntryFormScrollContainer" destination="YBJ-OG-VnO" id="HfJ-gw-rcT"/>
-                        <outlet property="newEntryFormScrollFrame" destination="DaS-C9-uWy" id="rRK-Zm-kSB"/>
                         <outlet property="viewFrame" destination="si0-hO-q2e" id="sTT-FP-RF1"/>
                     </connections>
                 </viewController>

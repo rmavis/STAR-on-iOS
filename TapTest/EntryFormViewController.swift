@@ -1,5 +1,5 @@
 //
-//  NewEntryFormViewController.swift
+//  EntryFormViewController.swift
 //  TapTest
 //
 //  Created by Richard Mavis on 10/3/15.
@@ -11,7 +11,7 @@
 
 import UIKit
 
-class NewEntryFormViewController: UIViewController, UITextViewDelegate {
+class EntryFormViewController: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var viewFrame: UIView!
     
@@ -21,10 +21,10 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var entryFormBorder: UIView!
     
-    @IBOutlet weak var newEntryFormScrollFrame: UIView!
-    @IBOutlet weak var newEntryFormScrollContainer: UIScrollView!
+    @IBOutlet weak var entryFormScrollFrame: UIView!
+    @IBOutlet weak var entryFormScrollContainer: UIScrollView!
     
-    @IBOutlet weak var newEntryForm: UIView!
+    @IBOutlet weak var entryForm: UIView!
     @IBOutlet weak var formValueField: UITextView!
     @IBOutlet weak var formTagsField: UITextView!
     
@@ -36,6 +36,8 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
     
     var showingPlaceholder = [UITextView: Bool]()
     var fieldIsValid = [UITextView: Bool]()
+
+    var entryToEdit: Entry? = nil
 
     
     
@@ -136,17 +138,30 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
         field.layer.borderColor = color.CGColor
         field.textColor = color
     }
-    
 
-    
+
+
     // This function is connected to the SAVE button.
     // If the value field is empty, then the button will be inactive.
     // The button becomes active only when the field is valid.
     // If the form submits successfully, then this will trigger
     // the segue back to the main table view.
-    @IBAction func saveNewEntryFromForm() {
+    @IBAction func delegateFormSaveAction() {
+        print("Need to delegate save action!")
+
+        if self.entryToEdit == nil {
+            saveNewEntryFromForm()
+        }
+        else {
+            saveEntryEdits()
+        }
+    }
+
+
+
+    func saveNewEntryFromForm() {
         print("Need to save new entry!")
-        
+
         // The tags are optional but, if present, must be an array.
         var tags: [String] = []
         if isTagsFieldFilled() == true {
@@ -162,11 +177,17 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
             print("New entry metadata: \(entry.metadata.join(", "))")
 
             // This segues back to the main table display.
-            self.performSegueWithIdentifier("SegueTableToNewEntryForm", sender: nil)
+            self.performSegueWithIdentifier("SegueEntryFormToTable", sender: nil)
         }
         else {
             print("Failed to save new entry to store : (")
         }
+    }
+
+
+
+    func saveEntryEdits() {
+        print("Need to save entry edits!")
     }
     
     
@@ -194,7 +215,8 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
     
     
     
-    // This runs when the view appears.
+    // This runs when the view is loaded.
+    // Need to figure out how to load the passed Entry.  #HERE
     func setFormInitialState() {
         // These only need to be set once.
         // Changing the `enabled` state will change the button's color.
@@ -330,8 +352,8 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
             let keyboardSize = userInfo[UIKeyboardFrameEndUserInfoKey]!.CGRectValue.size
             let contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0);
             
-            newEntryFormScrollContainer.contentInset = contentInsets
-            newEntryFormScrollContainer.scrollIndicatorInsets = contentInsets
+            entryFormScrollContainer.contentInset = contentInsets
+            entryFormScrollContainer.scrollIndicatorInsets = contentInsets
         }
         
         NSNotificationCenter.defaultCenter().removeObserver(self)
@@ -344,8 +366,8 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
         // print("Keyboard will hide!")
         
         let contentInsets = UIEdgeInsetsZero
-        newEntryFormScrollContainer.contentInset = contentInsets
-        newEntryFormScrollContainer.scrollIndicatorInsets = contentInsets
+        entryFormScrollContainer.contentInset = contentInsets
+        entryFormScrollContainer.scrollIndicatorInsets = contentInsets
     }
     
     
@@ -382,7 +404,7 @@ class NewEntryFormViewController: UIViewController, UITextViewDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        // print("[Form VC] View will appear")
+        print("[Form VC] View will appear!")
         
         // validateFormFields()
 

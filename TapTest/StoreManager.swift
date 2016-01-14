@@ -210,7 +210,9 @@ class StoreManager: NSObject, NSFileManagerDelegate {
 
         let storeManager = StoreManager()
         let fileManager = storeManager.fileManager
-        
+
+        // StoreManager.copyFileFromBundleToSandbox()
+
         if fileManager.fileExistsAtPath(StoreManager.appendFilenameToDocumentsPath()) {
             // print("Store file exists: \(StoreManager.appendFilenameToDocumentsPath())")
         }
@@ -226,7 +228,7 @@ class StoreManager: NSObject, NSFileManagerDelegate {
         do {
             let storeManager = StoreManager()
             try storeManager.fileManager.copyItemAtPath(from, toPath: to)
-            // print("Copied store file from '\(from)' to '\(to)'.")
+            print("Copied store file from '\(from)' to '\(to)'.")
             return true
         }
 

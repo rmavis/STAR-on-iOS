@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		814F1B901BC0850F00324762 /* NewEntryFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814F1B8F1BC0850F00324762 /* NewEntryFormViewController.swift */; };
+		814F1B901BC0850F00324762 /* EntryFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814F1B8F1BC0850F00324762 /* EntryFormViewController.swift */; };
 		818AFE6E1BB9B7D400C3376D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818AFE6D1BB9B7D400C3376D /* AppDelegate.swift */; };
 		818AFE701BB9B7D400C3376D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818AFE6F1BB9B7D400C3376D /* ViewController.swift */; };
 		818AFE731BB9B7D400C3376D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 818AFE711BB9B7D400C3376D /* Main.storyboard */; };
@@ -46,7 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		814F1B8F1BC0850F00324762 /* NewEntryFormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewEntryFormViewController.swift; sourceTree = "<group>"; };
+		814F1B8F1BC0850F00324762 /* EntryFormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntryFormViewController.swift; sourceTree = "<group>"; };
 		818AFE6A1BB9B7D400C3376D /* TapTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TapTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		818AFE6D1BB9B7D400C3376D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		818AFE6F1BB9B7D400C3376D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -129,7 +129,7 @@
 				92A34F891C2A4B5700597298 /* EntryMetadata.swift */,
 				818AFEA51BBA0A5000C3376D /* EntryTags.swift */,
 				818AFEA31BBA097600C3376D /* EntryValue.swift */,
-				814F1B8F1BC0850F00324762 /* NewEntryFormViewController.swift */,
+				814F1B8F1BC0850F00324762 /* EntryFormViewController.swift */,
 				818AFEB11BBC856F00C3376D /* TableCellNewEntry.swift */,
 				818AFEAD1BBB4DCC00C3376D /* TableCellView.swift */,
 				92F29D9E1C3C8EEC00BFB973 /* Regex.swift */,
@@ -297,7 +297,7 @@
 				818AFE9C1BB9C11000C3376D /* StoreManager.swift in Sources */,
 				818AFEB21BBC856F00C3376D /* TableCellNewEntry.swift in Sources */,
 				818AFEA41BBA097600C3376D /* EntryValue.swift in Sources */,
-				814F1B901BC0850F00324762 /* NewEntryFormViewController.swift in Sources */,
+				814F1B901BC0850F00324762 /* EntryFormViewController.swift in Sources */,
 				818AFE701BB9B7D400C3376D /* ViewController.swift in Sources */,
 				818AFEB01BBC70F100C3376D /* EntryFilter.swift in Sources */,
 				927995791C33506B00F9ADC2 /* EntryAction.swift in Sources */,
