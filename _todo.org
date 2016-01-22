@@ -1,4 +1,4 @@
-* Build [4/11]
+* Build [5/12]
 ** DONE Reverse order of entries?
    So additions are on top.
 ** DONE Add entry [3/3]
@@ -7,7 +7,8 @@
    - [X] Add entry to view
 ** DONE Delete entry
 ** DONE Open / copy default actions
-** TODO Edit entry
+** DONE Edit entry
+** TODO Extra table length
 ** TODO Long tap for action selection
 ** TODO Highlight matching search string
 ** TODO Tags view?
