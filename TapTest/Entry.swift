@@ -23,6 +23,13 @@ class Entry {
 
 
 
+    static func resetRefIdCount() -> Int {
+        Entry.refIdCount = 0
+        return Entry.refIdCount
+    }
+
+
+
     // The value is required.
     // The tags are optional -- if none are required, pass an empty array.
     static func createFromForm(value: String, tags: [String]) -> Entry {
@@ -64,6 +71,10 @@ class Entry {
     let tags: EntryTags
     let metadata: EntryMetadata
     let refId: Int
+
+    // If the Entry is selected in the main table view,
+    // then this will store its Index Path for easy referencing.
+    var indexPath: NSIndexPath? = nil
 
     
     

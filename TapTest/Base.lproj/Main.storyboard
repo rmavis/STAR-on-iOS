@@ -243,7 +243,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <segue destination="BYZ-38-t0r" kind="show" identifier="SegueTableToNewEntryForm" id="ePM-2a-9as"/>
+                                            <segue destination="BYZ-38-t0r" kind="show" identifier="SegueTableToEntryForm" id="ePM-2a-9as"/>
                                         </connections>
                                     </button>
                                 </subviews>

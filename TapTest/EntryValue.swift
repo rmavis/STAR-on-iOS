@@ -10,7 +10,7 @@ import Foundation
 
 class EntryValue {
 
-    let string: String
+    var string: String
 
 
     init(part: String) {

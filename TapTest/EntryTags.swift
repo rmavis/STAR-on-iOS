@@ -39,7 +39,7 @@ class EntryTags {
     //
     
     
-    let pool: [String]
+    var pool: [String]
 
 
 

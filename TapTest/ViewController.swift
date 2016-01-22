@@ -67,7 +67,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func getCurrentEntriesCache() -> [Entry]? {
         if let searchTerm = self.entriesSearchBar.text {
             if let cache = self.entriesCache[searchTerm.lowercaseString] {
-                print("Got current entries cache for '\(searchTerm)'")
+                // print("Got current entries cache for '\(searchTerm)'")
                 return cache
             }
             else {
@@ -240,7 +240,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // This is also called while building the table.
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let cache = getCurrentEntriesCache() {
-            print("Returning number of rows: \(cache.count + numberRowsToInsert) // \(cache.count)")
+            // print("Returning number of rows: \(cache.count + numberRowsToInsert) // \(cache.count)")
             return cache.count
         }
         else {
@@ -308,6 +308,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         if let cache = getCurrentEntriesCache() {
             self.selectedEntry = cache[indexPath.row]
+            self.selectedEntry!.indexPath = indexPath
+
             self.performSegueWithIdentifier("SegueEntryFormToTable", sender: nil)
             // After this, `prepareForSegue` will be called.
             // That function sets `selectedEntry` back to nil.
@@ -378,7 +380,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //
 
     func updateEntryInStoreAndView(edEntry: Entry, tableView: UITableView, indexPath: NSIndexPath) -> Bool {
-        // print("Want to update entry with value \(newEntry.value.string)")
+        print("Want to update entry with value \(edEntry.value.string)")
 
         let edId = edEntry.refId
         var bkEntries: [Entry] = [ ]
@@ -551,7 +553,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
 
         StoreManager.ensureFileExists()  // This is lame.  #HERE
-        self.entriesCache[""] = StoreManager.getEntries()
+
+        if self.entriesCache.count == 0 {
+            self.entriesCache[""] = StoreManager.getEntries()
+        }
 
         self.entriesTable.delegate = self
         self.entriesTable.dataSource = self
@@ -570,6 +575,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
 
         super.viewWillAppear(animated)
+
+        // The Entry Form VC can set this. And if it's set, then the entry needs to be updated.
+        if let entry = self.selectedEntry {
+            print("Updating table with edited entry '\(entry.value.string)' (\(entry.refId))")
+
+            updateEntryInStoreAndView(entry, tableView: self.entriesTable, indexPath: entry.indexPath!)
+            self.selectedEntry = nil
+        }
         
         // This repeats the entire process of building the table.
         // When returning from the new entry form, this doesn't need to run.
@@ -597,9 +610,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        print("[Main VC] Preparing to segue away from main view controller")
+
         if (segue.identifier == "SegueEntryFormToTable") {
             if self.selectedEntry != nil {
                 print("Seguing to entry form with \(self.selectedEntry!.value.string)!")
+
                 let formVC = segue.destinationViewController as! EntryFormViewController;
                 formVC.entryToEdit = self.selectedEntry
                 self.selectedEntry = nil

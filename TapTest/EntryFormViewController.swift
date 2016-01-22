@@ -177,7 +177,7 @@ class EntryFormViewController: UIViewController, UITextViewDelegate {
             print("New entry metadata: \(entry.metadata.join(", "))")
 
             // This segues back to the main table display.
-            self.performSegueWithIdentifier("SegueEntryFormToTable", sender: nil)
+            self.performSegueWithIdentifier("SegueTableToEntryForm", sender: nil)
         }
         else {
             print("Failed to save new entry to store : (")
@@ -188,6 +188,11 @@ class EntryFormViewController: UIViewController, UITextViewDelegate {
 
     func saveEntryEdits() {
         print("Need to save entry edits!")
+
+        self.entryToEdit!.value.string = formValueField.text
+        self.entryToEdit!.tags.pool = EntryTags.stringToCleanArray(formTagsField.text)
+
+        self.performSegueWithIdentifier("SegueTableToEntryForm", sender: nil)
     }
     
     
@@ -216,27 +221,37 @@ class EntryFormViewController: UIViewController, UITextViewDelegate {
     
     
     // This runs when the view is loaded.
-    // Need to figure out how to load the passed Entry.  #HERE
     func setFormInitialState() {
         // These only need to be set once.
         // Changing the `enabled` state will change the button's color.
         formSaveButton.setTitleColor(validElementColor, forState: .Normal)
         formSaveButton.setTitleColor(invalidElementColor, forState: .Disabled)
-        
-        formValueField.text = valueFieldPlaceholder
-        formTagsField.text = tagsFieldPlaceholder
 
-        // These booleans are set so that they can be checked,
-        // rather than checking against the placeholder string.
-        showingPlaceholder[formValueField] = true
-        showingPlaceholder[formTagsField] = true
-        
-        // These are set to true
-        // 1. to initialize the keys in the dictionary,
-        // 2. but they are actually invalid,
-        // 3. so the validator will flag them as invalid and color the fields appropriately.
-        fieldIsValid[formValueField] = true
-        fieldIsValid[formTagsField] = true
+        if let entry = self.entryToEdit {
+            formValueField.text = entry.value.string
+            formTagsField.text = entry.tags.join("\n")
+
+            // These booleans are set so that they can be checked,
+            // rather than checking against the placeholder string.
+            // And these and the `fieldIsValid` values are set to their opposites
+            // so the validator function will color the fields appropriately.
+            showingPlaceholder[formValueField] = false
+            showingPlaceholder[formTagsField] = false
+
+            fieldIsValid[formValueField] = false
+            fieldIsValid[formTagsField] = false
+        }
+        else {
+            formValueField.text = valueFieldPlaceholder
+            formTagsField.text = tagsFieldPlaceholder
+
+            showingPlaceholder[formValueField] = true
+            showingPlaceholder[formTagsField] = true
+
+            fieldIsValid[formValueField] = true
+            fieldIsValid[formTagsField] = true
+        }
+
         validateFormFields()
     }
     
@@ -386,7 +401,7 @@ class EntryFormViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        StoreManager.ensureFileExists()  // This is lame.  #HERE
+        // StoreManager.ensureFileExists()  // This is lame.  #HERE
 
         // print("Loading new entry form view controller!")
 
@@ -429,5 +444,22 @@ class EntryFormViewController: UIViewController, UITextViewDelegate {
         // This doesn't need to occur since it has already been removed.
         // NSNotificationCenter.defaultCenter().removeObserver(self)
     }
+
+
+
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        print("[Form VC] Preparing to segue away from form view controller")
+
+        if (segue.identifier == "SegueTableToEntryForm") {
+            if self.entryToEdit != nil {
+                print("Seguing to main table view with \(self.entryToEdit!.value.string)!")
+
+                let tableVC = segue.destinationViewController as! ViewController;
+                tableVC.selectedEntry = self.entryToEdit
+                self.entryToEdit = nil
+            }
+        }
+    }
+
     
 }
