@@ -42,6 +42,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
 
 
+    // This sets the status bar color.
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.Default
+    }
+
+
+
+
 
     //
     // This section is related to the entries cache.

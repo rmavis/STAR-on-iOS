@@ -39,7 +39,15 @@ class EntryFormViewController: UIViewController, UITextViewDelegate {
 
     var entryToEdit: Entry? = nil
 
-    
+
+
+
+    // Sets the status bar color.
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
+
+
     
     @IBAction func dismissKeyboard() {
         print("Need to dismiss keyboard!")

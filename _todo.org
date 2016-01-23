@@ -1,4 +1,4 @@
-* Build [5/12]
+* Build [6/13]
 ** DONE Reverse order of entries?
    So additions are on top.
 ** DONE Add entry [3/3]
@@ -8,6 +8,7 @@
 ** DONE Delete entry
 ** DONE Open / copy default actions
 ** DONE Edit entry
+** DONE Color time bar correctly in Entry Form view
 ** TODO Extra table length
 ** TODO Long tap for action selection
 ** TODO Highlight matching search string
